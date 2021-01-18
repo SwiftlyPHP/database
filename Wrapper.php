@@ -5,7 +5,7 @@ namespace Swiftly\Database;
 use Swiftly\Database\AdapterInterface;
 
 /**
- * Provides common wrapper for working with all DB types
+ * Provides common wrapper for working with SQL databases
  *
  * @author clvarley
  */
