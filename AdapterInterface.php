@@ -4,6 +4,8 @@ namespace Swiftly\Database;
 
 /**
  * Interface all database adapters have to implement
+ *
+ * @author clvarley
  */
 Interface AdapterInterface
 {
@@ -25,8 +27,8 @@ Interface AdapterInterface
     /**
      * Execute the given SQL query
      *
-     * @param string SQL query
-     * @return bool  Query successful
+     * @param string $sql SQL query
+     * @return bool       Query successful
      */
     public function query( string $sql ) : bool;
 
@@ -49,6 +51,6 @@ Interface AdapterInterface
      *
      * @return int Insert ID
      */
-    public function getLastInsertId() : int
+    public function getLastInsertId() : int;
 
 }
