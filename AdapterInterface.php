@@ -2,6 +2,8 @@
 
 namespace Swiftly\Database;
 
+use Swiftly\Database\Connection;
+
 /**
  * Interface all database adapters have to implement
  *
@@ -9,6 +11,13 @@ namespace Swiftly\Database;
  */
 Interface AdapterInterface
 {
+
+    /**
+     * Create an adapter using the given connection options
+     *
+     * @param Connection $connection Connection info
+     */
+    public function __construct( Connection $connection );
 
     /**
      * Connect to the database
