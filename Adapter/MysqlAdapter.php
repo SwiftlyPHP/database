@@ -2,11 +2,8 @@
 
 namespace Swiftly\Database\Adapter;
 
-use Swiftly\Database\{
-    AdapterInterface,
-    Connection
-};
-
+use Swiftly\Database\AdapterInterface;
+use Swiftly\Database\Connection;
 use mysqli;
 
 /**
