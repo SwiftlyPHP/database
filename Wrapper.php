@@ -106,7 +106,7 @@ Class Wrapper
      * Execute an SQL query and return all rows/results
      *
      * @param string $sql SQL query
-     * @return array      Query results
+     * @return array[]    Query results
      */
     public function queryResults( string $sql ) : array
     {
