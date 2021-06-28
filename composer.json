@@ -1,7 +1,19 @@
 {
     "name": "swiftly/database",
     "description": "Database abstraction wrapper.",
+    "homepage": "https://github.com/SwiftlyPHP/database",
+    "readme": "README.md",
     "type": "library",
     "license": "MIT",
-    "require": {}
+    "require": {
+        "php": ">=7.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Swiftly\\Database\\": "src/"
+        }
+    },
+    "require-dev": {
+        "vimeo/psalm": "^4.8"
+    }
 }
