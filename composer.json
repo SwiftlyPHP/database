@@ -1,0 +1,7 @@
+{
+    "name": "swiftly/database",
+    "description": "Database abstraction wrapper.",
+    "type": "library",
+    "license": "MIT",
+    "require": {}
+}
