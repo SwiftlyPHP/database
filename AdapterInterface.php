@@ -24,7 +24,7 @@ Interface AdapterInterface
      *
      * @return bool Connected successfully
      */
-    public function connect() : bool
+    public function connect() : bool;
 
     /**
      * Disconnect from the database
