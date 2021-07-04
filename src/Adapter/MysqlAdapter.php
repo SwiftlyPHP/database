@@ -91,7 +91,7 @@ Class MysqlAdapter Implements AdapterInterface
 
         $this->setResult( $result );
 
-        return $this->result !== null;
+        return ( $this->result !== null );
     }
 
     /**
