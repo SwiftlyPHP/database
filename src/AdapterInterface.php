@@ -44,6 +44,8 @@ Interface AdapterInterface
     /**
      * Gets all the results from the last query
      *
+     * @psalm-return list<array>
+     *
      * @return array[] Query results
      */
     public function getResults() : array;

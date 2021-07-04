@@ -116,7 +116,7 @@ Class MysqlAdapter Implements AdapterInterface
             return [];
         }
 
-        /** @var array[] */
+        /** @var list<array> */
         return $this->result->fetch_all( MYSQLI_ASSOC );
     }
 
