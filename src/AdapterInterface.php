@@ -13,13 +13,6 @@ Interface AdapterInterface
 {
 
     /**
-     * Create an adapter using the given connection options
-     *
-     * @param Connection $connection Connection info
-     */
-    public function __construct( Connection $connection );
-
-    /**
      * Connect to the database
      *
      * @return bool Connected successfully
