@@ -5,6 +5,9 @@ namespace Swiftly\Database\Adapter;
 use Swiftly\Database\AdapterInterface;
 use Swiftly\Database\Connection;
 use mysqli;
+use mysqli_result;
+
+use const MYSQLI_ASSOC;
 
 /**
  * Adapter used to work with MySQL databases
@@ -24,9 +27,16 @@ Class MysqlAdapter Implements AdapterInterface
     /**
      * Raw MySqli database handle
      *
-     * @var mysqli $handle Database handle
+     * @var mysqli|null $handle Database handle
      */
     protected $handle = null;
+
+    /**
+     * Result of latest query
+     *
+     * @var mysqli_result|null $result Result set
+     */
+    private $result = null;
 
     /**
      * Creates an adapter using the given MySQL database info
@@ -60,7 +70,9 @@ Class MysqlAdapter Implements AdapterInterface
      */
     public function disconnect() : void
     {
-        // TODO
+        // Free memory
+        $this->setResult( null );
+        $this->handle->close();
 
         return;
     }
@@ -70,9 +82,16 @@ Class MysqlAdapter Implements AdapterInterface
      */
     public function query( string $sql ) : bool
     {
-        // TODO
+        $result = $this->handle->query( $sql );
 
-        return true;
+        // No results?
+        if ( $result === false ) {
+            $result = null;
+        }
+
+        $this->setResult( $result );
+
+        return $this->result !== null;
     }
 
     /**
@@ -80,9 +99,11 @@ Class MysqlAdapter Implements AdapterInterface
      */
     public function getResult() : array
     {
-        // TODO
+        if ( $this->result === null ) {
+            return [];
+        }
 
-        return [];
+        return $this->result->fetch_assoc() ?: [];
     }
 
     /**
@@ -90,9 +111,11 @@ Class MysqlAdapter Implements AdapterInterface
      */
     public function getResults() : array
     {
-        // TODO
+        if ( $this->result === null ) {
+            return [];
+        }
 
-        return [];
+        return $this->result->fetch_all( MYSQLI_ASSOC );
     }
 
     /**
@@ -100,8 +123,24 @@ Class MysqlAdapter Implements AdapterInterface
      */
     public function getLastInsertId() : int
     {
-        // TODO
+        return $this->handle->insert_id;
+    }
 
-        return 0;
+    /**
+     * Sets the current result set
+     *
+     * @internal
+     * @param mysqli_result|null $result (Optional) Result set
+     * @return void                      N/a
+     */
+    private function setResult( mysqli_result $result = null ) : void
+    {
+        if ( $this->result !== null ) {
+            $this->result->free();
+        }
+
+        $this->result = $result;
+
+        return;
     }
 }
