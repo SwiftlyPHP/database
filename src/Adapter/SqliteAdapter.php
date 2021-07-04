@@ -4,7 +4,7 @@ namespace Swiftly\Database\Adapter;
 
 use Swiftly\Database\AdapterInterface;
 use SQLite3;
-use SQLiteResult;
+use SQLite3Result;
 
 use const SQLITE3_OPEN_READWRITE;
 use const SQLITE3_OPEN_CREATE;
@@ -34,7 +34,7 @@ Class SqliteAdapter Implements AdapterInterface
     /**
      * Result set from the most recent query
      *
-     * @var SQLiteResult|null $result SQLite result
+     * @var SQLite3Result|null $result SQLite result
      */
     private $result = null;
 
