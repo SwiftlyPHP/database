@@ -52,4 +52,29 @@ Class Connection
      */
     public $socket = '';
 
+    /**
+     * Convert an array into a connection object
+     *
+     * @psalm-param array{
+     *  host:string,
+     *  username?:string,
+     *  password?:string,
+     *  name?:string,
+     *  post?:int
+     * } $credentials
+     *
+     * @param array $credentials Connection credentials
+     * @return Connection        Connection object
+     */
+    public static function fromArray( array $credentials ) : Connection
+    {
+        $connection = new Connection;
+        $connection->host     = $credentials['host'];
+        $connection->username = $credentials['username'] ?? '';
+        $connection->password = $credentials['password'] ?? '';
+        $connection->name     = $credentials['name'] ?? '';
+        $connection->port     = $credentials['post'] ?? 0;
+
+        return $connection;
+    }
 }

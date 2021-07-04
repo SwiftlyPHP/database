@@ -26,7 +26,7 @@ Class MysqlAdapter Implements AdapterInterface
      *
      * @var mysqli $handle Database handle
      */
-    protected $handle;
+    protected $handle = null;
 
     /**
      * Creates an adapter using the given MySQL database info
