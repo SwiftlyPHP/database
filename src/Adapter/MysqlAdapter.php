@@ -84,14 +84,15 @@ Class MysqlAdapter Implements AdapterInterface
     {
         $result = $this->handle->query( $sql );
 
-        // No results?
-        if ( $result === false ) {
-            $result = null;
+        // Produces results?
+        if ( $result instanceof mysqli_result ) {
+            $this->setResult( $result );
+        } else {
+            $this->setResult( null );
         }
 
-        $this->setResult( $result );
-
-        return ( $this->result !== null );
+        // Query successful
+        return ( $result !== false );
     }
 
     /**
@@ -115,6 +116,7 @@ Class MysqlAdapter Implements AdapterInterface
             return [];
         }
 
+        /** @var array[] */
         return $this->result->fetch_all( MYSQLI_ASSOC );
     }
 
