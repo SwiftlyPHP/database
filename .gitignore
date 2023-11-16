@@ -1,0 +1,9 @@
+# Composer
+/vendor
+/composer.lock
+
+# PHPUnit
+/reports
+
+# Mac specific
+.DS_Store

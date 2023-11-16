@@ -1,0 +1,17 @@
+{
+    "name": "swiftly/database",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Swiftly\\Database\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^7.4 || ^8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9",
+        "vimeo/psalm": "^5.15"
+    }
+}
