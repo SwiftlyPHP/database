@@ -10,7 +10,22 @@ use Swiftly\Database\ExceptionInterface;
  *
  * @package Exception
  *
- * @psalm-immutable
+ * @psalm-external-mutation-free
  */
-abstract class QueryException extends Exception implements ExceptionInterface
-{}
+class QueryException extends Exception implements ExceptionInterface
+{
+    /**
+     * Create a new exception with the details from another.
+     *
+     * @param Exception $exception Exception to wrap
+     * @return self                Query exception
+     */
+    public static function createFromException(Exception $exception): self
+    {
+        return new self(
+            $exception->getMessage(),
+            $exception->getCode(),
+            $exception
+        );
+    }
+}

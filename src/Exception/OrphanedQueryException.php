@@ -9,7 +9,7 @@ use Swiftly\Database\Exception\QueryException;
  *
  * @package Exception
  *
- * @psalm-immutable
+ * @psalm-external-mutation-free
  */
 final class OrphanedQueryException extends QueryException
 {

@@ -6,6 +6,7 @@ use Swiftly\Database\Parameter;
 use Swiftly\Database\DatabaseAwareInterface;
 use Swiftly\Database\DatabaseAwareTrait;
 use Swiftly\Database\Exception\OrphanedQueryException;
+use Swiftly\Database\Collection;
 
 /**
  * Stores information regarding a single SQL query.
@@ -23,6 +24,9 @@ class Query implements DatabaseAwareInterface
     const TYPE_INSERT = 'INSERT';
     const TYPE_DELETE = 'DELETE';
 
+    const STATUS_OK = true;
+    const STATUS_ERROR = false;
+
     /** @var non-empty-string $query */
     private string $query;
 
@@ -38,6 +42,7 @@ class Query implements DatabaseAwareInterface
     {
         $this->query = $query;
         $this->parameters = [];
+        $this->setDatabase(null);
     }
 
     /**
@@ -57,11 +62,31 @@ class Query implements DatabaseAwareInterface
     /**
      * Return all the parameters that have been provided for this query.
      *
-     * @return Parameter[] Query parameter values
+     * @return array<non-empty-string,Parameter> Query parameter values
      */
     public function getParameters(): array
     {
         return $this->parameters;
+    }
+
+    /**
+     * Determine if any parameters have been provided for this query.
+     *
+     * @return bool Query has parameter values.
+     */
+    public function hasParameters(): bool
+    {
+        return !empty($this->parameters);
+    }
+
+    /**
+     * Return the raw (unescaped) SQL query.
+     *
+     * @return non-empty-string SQL statement 
+     */
+    public function getQuery(): string
+    {
+        return $this->query;
     }
 
     /**
@@ -71,10 +96,12 @@ class Query implements DatabaseAwareInterface
      *
      * @see \Swiftly\Database\Database::query
      *
+     * @return Collection|null Collection containing query results
+     *
      * @throws OrphanedQueryException
      *      If executing a query that is not associated with a database.
      */
-    public function execute(): void
+    public function execute(): ?Collection
     {
         $database = $this->getDatabase();
 

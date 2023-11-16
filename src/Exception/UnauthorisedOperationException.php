@@ -12,7 +12,7 @@ use function sprintf;
  *
  * @package Exception
  *
- * @psalm-immutable
+ * @psalm-external-mutation-free
  */
 final class UnauthorisedOperationException extends RuntimeException implements
     ExceptionInterface
