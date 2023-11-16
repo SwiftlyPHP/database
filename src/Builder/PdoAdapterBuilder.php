@@ -210,7 +210,7 @@ class PdoAdapterBuilder implements BuilerInterface
     /**
      * Create a DSN string using the provided configuration.
      *
-     * @return non-empty-string DSN string
+     * @return string DSN string
      */
     private function createDsn(): string
     {

@@ -12,8 +12,6 @@ use Swiftly\Database\Collection;
  * Stores information regarding a single SQL query.
  *
  * @package Query
- *
- * @psalm-external-mutation-free
  */
 class Query implements DatabaseAwareInterface
 {
@@ -80,7 +78,7 @@ class Query implements DatabaseAwareInterface
     }
 
     /**
-     * Return the raw (unescaped) SQL query.
+     * Return the raw (unprepared) SQL query.
      *
      * @return non-empty-string SQL statement 
      */
