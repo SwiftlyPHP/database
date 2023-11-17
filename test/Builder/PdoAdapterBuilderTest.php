@@ -8,7 +8,7 @@ use PDO;
 use Swiftly\Database\Builder\PdoAdapterBuilder;
 use Swiftly\Database\Test\PdoExpectationTrait;
 use Swiftly\Database\Backend\PdoAdapter;
-use Exception;
+use PDOException;
 
 /**
  * @covers \Swiftly\Database\Builder\PdoAdapterBuilder
@@ -202,10 +202,10 @@ class PdoAdapterBuilderTest extends TestCase
 
         PdoAdapterBuilder::setFactory(null);
 
-        // Will throw "PDOException: could not find driver"
+        // Suppress thrown "PDOException: could not find driver"
         try {
             $this->builder->create();
-        } catch (Exception $e) {}
+        } catch (PDOException $e) {}
 
         self::assertSame(1, $count);
     }

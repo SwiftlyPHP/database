@@ -54,6 +54,7 @@ class Collection implements IteratorAggregate, Countable
      * Filter the items in this collection using the supplied predicate.
      *
      * @psalm-param pure-callable(TVal):bool $predicate
+     * @psalm-return self<non-negative-int,TVal>
      *
      * @param callable $predicate Filter function
      * @return self<int,TVal>     Filtered collection
@@ -77,6 +78,7 @@ class Collection implements IteratorAggregate, Countable
      * @template TResult
      *
      * @psalm-param pure-callable(TVal):TResult $callback
+     * @psalm-return self<non-negative-int,TResult>
      *
      * @param callable $callback Map function
      * @return self<int,TResult> New collection
