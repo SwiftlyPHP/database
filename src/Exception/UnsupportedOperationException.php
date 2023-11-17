@@ -4,8 +4,10 @@ namespace Swiftly\Database\Exception;
 
 use RuntimeException;
 use Swiftly\Database\ExceptionInterface;
+use Swiftly\Database\BackendInterface;
 
 use function sprintf;
+use function get_class;
 
 /**
  * Indicates the current backend does not support the requested operation.
@@ -30,6 +32,20 @@ final class UnsupportedOperationException extends RuntimeException implements
             "Requested operation '%s' is not supported by %s adapter!",
             $operation,
             $backend
+        ));
+    }
+
+    /**
+     * Static constructor for adapters that do not support transactions.
+     *
+     * @param BackendInterface $adapter Database adapter
+     * @return self                     Unsupported operation exception
+     */
+    public static function transaction(BackendInterface $adapter): self
+    {
+        return new self(sprintf(
+            "Cannot start transaction as adapter '%s' does not support them!",
+            get_class($adapter)
         ));
     }
 }

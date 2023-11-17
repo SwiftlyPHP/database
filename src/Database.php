@@ -7,6 +7,9 @@ use Swiftly\Database\Query;
 use Swiftly\Database\Exception\UnauthorisedOperationException;
 use Swiftly\Database\Exception\UnsupportedOperationException;
 use Swiftly\Database\Collection;
+use Swiftly\Database\TransactionInterface;
+use Swiftly\Database\Exception\TransactionException;
+use Exception;
 
 /**
  * A handler object for managing interactions with a database backend.
@@ -16,6 +19,7 @@ use Swiftly\Database\Collection;
 class Database
 {
     private BackendInterface $backend;
+    private bool $inTransaction;
 
     /**
      * Create a new database client to the provided backend.
@@ -25,6 +29,7 @@ class Database
     public function __construct(BackendInterface $backend)
     {
         $this->backend = $backend;
+        $this->inTransaction = false;
     }
 
     /**
@@ -50,6 +55,113 @@ class Database
             : [];
 
         return $this->backend->execute($sql, $parameters);
+    }
+
+    /**
+     * Execute a query (or sequence of queries) inside a transaction.
+     *
+     * Sets up and starts a transaction, calls the user provided function and
+     * then - depending on the state of the callback - commits or aborts the
+     * transaction.
+     *
+     * The provided callback is passed a single argument: the object on which
+     * `withTransaction` is being called.
+     *
+     * ```php
+     * <?php
+     *
+     * $database->withTransaction(function (Database $database) {
+     *      $database
+     *          ->query(...)
+     *          ->execute();
+     *
+     *      return true;
+     * });
+     * ```
+     *
+     * If the user provided callback returns false or throws an exception, the
+     * transaction will be aborted and no data will be committed. Otherwise, the
+     * return value of the callback is passed back as the return value of this
+     * method.
+     *
+     * ```php
+     * <?php
+     *
+     * $result = $database->withTransaction(function (Database $database) {
+     *      return 'Hello world';
+     * });
+     *
+     * assert($result === 'Hello world');
+     * ```
+     *
+     * @template TVal
+     * @psalm-param callable(self):TVal $callback
+     * @psalm-return TVal
+     *
+     * @param callable $callback User provided function
+     * @return mixed             Callback result
+     *
+     * @throws UnsupportedOperationException
+     *      If the current adapter does not support transactions
+     * @throws TransactionException
+     *      If a transaction error occurs
+     */
+    public function withTransaction(callable $callback)
+    {
+        $this->startTransaction();
+
+        try {
+            if (false === ($result = $callback($this))) {
+                $this->backend->abortTransaction();
+            } else {
+                $this->backend->commitTransaction();
+            }
+        } catch (Exception $e) {
+            $this->backend->abortTransaction();
+
+            throw TransactionException::createFromException($e);
+        } finally {
+            $this->inTransaction = false;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Determine if the current adapter supports transactions
+     *
+     * @psalm-mutation-free
+     * @psalm-assert-if-true TransactionInterface $this->backend
+     *
+     * @return bool Adapter supports transactions
+     */
+    public function hasTransactionSupport(): bool
+    {
+        return ($this->backend instanceof TransactionInterface);
+    }
+
+    /**
+     * Start a new database transaction.
+     *
+     * @psalm-assert TransactionInterface $this->backend
+     *
+     * @throws UnsupportedOperationException
+     *      If the current adapter does not support transactions
+     * @throws TransactionException
+     *      If there is already a transaction ongoing
+     */
+    private function startTransaction(): void
+    {
+        if (!$this->hasTransactionSupport()) {
+            throw UnsupportedOperationException::transaction($this->backend);
+        }
+
+        if (true === $this->inTransaction) {
+            throw TransactionException::inProgress();
+        }
+
+        $this->backend->startTransaction();
+        $this->inTransaction = true;
     }
 
     /**
