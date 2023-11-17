@@ -75,7 +75,7 @@ class PdoAdapterBuilder implements BuilderInterface
      * This is also helpfull for unit testing. Using a factory you can return a
      * PDO mock and verify that options and attributes have been configured
      * correctly.
-     * 
+     *
      * The callback will be passed the following arguments:
      * * `string $dsn` - The connection DSN
      * * `?string $username` - Database username
@@ -277,7 +277,7 @@ class PdoAdapterBuilder implements BuilderInterface
         } elseif (null !== $this->socket) {
             $dsn[] = sprintf('%s:unix_socket=%s', $this->type, $this->socket);
         } else {
-            
+
         }
 
         if (null !== $this->username) {

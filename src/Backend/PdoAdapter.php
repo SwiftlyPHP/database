@@ -52,7 +52,7 @@ class PdoAdapter implements BackendInterface
 
         $status = $this->doQuery($statement);
 
-        $result = $status 
+        $result = $status
             ? $this->prepareResult($statement)
             : null;
 
@@ -70,7 +70,7 @@ class PdoAdapter implements BackendInterface
      * @return bool                   Query execution status
      *
      * @throws QueryException
-     *      If a more specific exception reason cannot be found.
+     *      If a more specific exception reason cannot be found
      */
     private function doQuery(PDOStatement $statement): bool
     {
@@ -96,7 +96,7 @@ class PdoAdapter implements BackendInterface
      * @return never
      *
      * @throws QueryException
-     *      If a more specific exception reason cannot be found.
+     *      If a more specific exception reason cannot be found
      */
     private function parseException(PDOException $exception): void
     {
@@ -106,7 +106,7 @@ class PdoAdapter implements BackendInterface
     /**
      * Parse and return the result of an executed PDO statement.
      *
-     * Additionally closes the current cursor (if open), clearing the connection 
+     * Additionally closes the current cursor (if open), clearing the connection
      * for future queries.
      *
      * @param PDOStatement $statement Executed PDO statement
@@ -123,7 +123,7 @@ class PdoAdapter implements BackendInterface
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * This adapter relies on {@see PDO::bindValue} to escape values, so apart
      * from handling array values in the case of `WHERE-IN` statements we do no
      * further processing.

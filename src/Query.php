@@ -19,13 +19,13 @@ class Query implements DatabaseAwareInterface
 {
     use DatabaseAwareTrait;
 
-    const TYPE_SELECT = 'SELECT';
-    const TYPE_UPDATE = 'UPDATE';
-    const TYPE_INSERT = 'INSERT';
-    const TYPE_DELETE = 'DELETE';
+    public const TYPE_SELECT = 'SELECT';
+    public const TYPE_UPDATE = 'UPDATE';
+    public const TYPE_INSERT = 'INSERT';
+    public const TYPE_DELETE = 'DELETE';
 
-    const STATUS_OK = true;
-    const STATUS_ERROR = false;
+    public const STATUS_OK = true;
+    public const STATUS_ERROR = false;
 
     /** @var non-empty-string $query */
     private string $query;
@@ -80,7 +80,7 @@ class Query implements DatabaseAwareInterface
      *
      * @psalm-mutation-free
      *
-     * @return bool Query has parameter values.
+     * @return bool Query has parameter values
      */
     public function hasParameters(): bool
     {
@@ -92,7 +92,7 @@ class Query implements DatabaseAwareInterface
      *
      * @psalm-mutation-free
      *
-     * @return non-empty-string SQL statement 
+     * @return non-empty-string SQL statement
      */
     public function getQuery(): string
     {
@@ -109,7 +109,7 @@ class Query implements DatabaseAwareInterface
      * @return Collection|null Collection containing query results
      *
      * @throws OrphanedQueryException
-     *      If executing a query that is not associated with a database.
+     *      If executing a query that is not associated with a database
      */
     public function execute(): ?Collection
     {

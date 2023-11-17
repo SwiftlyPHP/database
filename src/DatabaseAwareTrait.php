@@ -26,6 +26,8 @@ trait DatabaseAwareTrait
 
     /**
      * @psalm-external-mutation-free
+     *
+     * @param Database|null $database Database to attach
      */
     final public function setDatabase(?Database $database): void
     {

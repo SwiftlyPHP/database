@@ -21,7 +21,7 @@ final class OrphanedQueryException extends QueryException
     public static function create(): self
     {
         return new self(
-            "Failed to execute query as no database has been specified!",
+            'Failed to execute query as no database has been specified!',
         );
     }
 }

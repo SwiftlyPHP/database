@@ -10,7 +10,7 @@ use Swiftly\Database\Database;
  * @package Utility
  */
 interface DatabaseAwareInterface
-{    
+{
     /**
      * Returns the database handler to which the current object is related.
      *

@@ -37,9 +37,9 @@ class Database
      * @return Collection|null Collection containing query results
      *
      * @throws UnauthorisedOperationException
-     *      If the current database user does not have the permissions needed.
+     *      If the current database user does not have the permissions needed
      * @throws UnsupportedOperationException
-     *      If the current database does not support the requested operation.
+     *      If the current database does not support the requested operation
      */
     public function execute(Query $query): ?Collection
     {

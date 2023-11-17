@@ -22,4 +22,5 @@ namespace Swiftly\Database;
  * @package Exception
  */
 interface ExceptionInterface
-{}
+{
+}

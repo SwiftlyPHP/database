@@ -18,16 +18,16 @@ interface BackendInterface
     /**
      * Execute the given SQL statement and return the result.
      *
-     * @param non-empty-string $sql          SQL statement
-     * @param array<non-empty-string,string> Parameter values
-     * @return Collection|null               Collection containing query results
+     * @param non-empty-string $sql                      SQL statement
+     * @param array<non-empty-string,string> $parameters Parameter values
+     * @return Collection|null                           Query result collection
      *
      * @throws UnauthorisedOperationException
-     *      If the database user lacks the permission required for the command.
+     *      If the database user lacks the permission required for the command
      * @throws UnsupportedOperationException
-     *      If the database does not support/understand the command.
+     *      If the database does not support/understand the command
      * @throws QueryException
-     *      If any other error occurs while querying the database.
+     *      If any other error occurs while querying the database
      */
     public function execute(string $sql, array $parameters = []): ?Collection;
 
