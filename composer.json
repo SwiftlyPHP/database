@@ -7,6 +7,11 @@
             "Swiftly\\Database\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Swiftly\\Database\\Test\\": "test/"
+        }
+    },
     "require": {
         "php": "^7.4 || ^8.0"
     },

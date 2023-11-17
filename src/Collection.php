@@ -4,6 +4,7 @@ namespace Swiftly\Database;
 
 use IteratorAggregate;
 use Countable;
+use Iterator;
 
 use function count;
 
@@ -34,7 +35,7 @@ class Collection implements IteratorAggregate, Countable
     }
 
     /** {@inheritDoc} */
-    public function getIterator(): iterable
+    public function getIterator(): Iterator
     {
         yield from $this->rows;
     }

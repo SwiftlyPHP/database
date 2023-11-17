@@ -9,7 +9,7 @@ use Swiftly\Database\BackendInterface;
  *
  * @package Builder
  */
-interface BuilerInterface
+interface BuilderInterface
 {
     /**
      * Create a new database adapter instance.

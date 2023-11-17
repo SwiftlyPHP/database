@@ -2,7 +2,7 @@
 
 namespace Swiftly\Database\Builder;
 
-use Swiftly\Database\BuilerInterface;
+use Swiftly\Database\BuilderInterface;
 use PDO;
 use Swiftly\Database\Backend\PdoAdapter;
 
@@ -16,7 +16,7 @@ use function implode;
  *
  * @package Builder
  */
-class PdoAdapterBuilder implements BuilerInterface
+class PdoAdapterBuilder implements BuilderInterface
 {
     private string $type;
     private ?string $hostname = null;
@@ -30,6 +30,9 @@ class PdoAdapterBuilder implements BuilerInterface
     private array $options = [];
     /** @var array<int,mixed> $attributes */
     private array $attributes = [];
+
+    /** @var ?callable(string,?string,?string,array<string,scalar>):PDO */
+    private static $factory = null;
 
     /**
      * Create a new PDO builder for the given database type.
@@ -59,6 +62,59 @@ class PdoAdapterBuilder implements BuilerInterface
     public static function Postgres(): self
     {
         return new self('pgsql');
+    }
+
+    /**
+     * Set the factory used to create PDO instances.
+     *
+     * By providing a factory function you can use specify a userland class that
+     * should be used instead of native PDO. To maintain type consistency the
+     * provided callable must return a class that has PDO in its inheritance
+     * chain, requiring that all the methods match the existing signatures.
+     *
+     * This is also helpfull for unit testing. Using a factory you can return a
+     * PDO mock and verify that options and attributes have been configured
+     * correctly.
+     * 
+     * The callback will be passed the following arguments:
+     * * `string $dsn` - The connection DSN
+     * * `?string $username` - Database username
+     * * `?string $password` - Database password
+     * * `array $options` - Driver specific options
+     *
+     * Passing `null` to this method restores the default behaviour.
+     *
+     * @psalm-param ?callable(string,?string,?string,array<string,scalar>):PDO $factory
+     *
+     * @param callable|null $factory PDO instance factory
+     */
+    public static function setFactory(?callable $factory): void
+    {
+        self::$factory = $factory;
+    }
+
+    /**
+     * Creates a new PDO instance.
+     *
+     * Either returns a native PDO instance or, if a factory function has been
+     * provided, the instance returned by the factory.
+     *
+     * @param string $dsn                   Database DSN string
+     * @param string|null $username         Database user
+     * @param string|null $password         Database password
+     * @param array<string,scalar> $options Driver options
+     */
+    private static function createInstance(
+        string $dsn,
+        ?string $username,
+        ?string $password,
+        array $options
+    ): PDO {
+        if (null === self::$factory) {
+            return new PDO($dsn, $username, $password, $options);
+        }
+
+        return (self::$factory)($dsn, $username, $password, $options);
     }
 
     /**
@@ -193,7 +249,7 @@ class PdoAdapterBuilder implements BuilerInterface
      */
     public function create(): PdoAdapter
     {
-        $pdo = new PDO(
+        $pdo = self::createInstance(
             $this->createDsn(),
             $this->username,
             $this->password,
@@ -222,6 +278,14 @@ class PdoAdapterBuilder implements BuilerInterface
             $dsn[] = sprintf('%s:unix_socket=%s', $this->type, $this->socket);
         } else {
             
+        }
+
+        if (null !== $this->username) {
+            $dsn[] = sprintf('user=%s', $this->username);
+        }
+
+        if (null !== $this->password) {
+            $dsn[] = sprintf('password=%s', $this->password);
         }
 
         if (null !== $this->port) {
