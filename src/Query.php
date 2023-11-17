@@ -12,6 +12,8 @@ use Swiftly\Database\Collection;
  * Stores information regarding a single SQL query.
  *
  * @package Query
+ *
+ * @readonly
  */
 class Query implements DatabaseAwareInterface
 {
@@ -34,6 +36,8 @@ class Query implements DatabaseAwareInterface
     /**
      * Create a new wrapper around the given SQL.
      *
+     * @psalm-external-mutation-free
+     *
      * @param non-empty-string $query SQL statement
      */
     public function __construct(string $query)
@@ -45,6 +49,8 @@ class Query implements DatabaseAwareInterface
 
     /**
      * Set the value of a placeholder parameter.
+     *
+     * @psalm-external-mutation-free
      *
      * @param non-empty-string $name     Parameter name
      * @param scalar|list<scalar> $value Value to be escaped
@@ -60,6 +66,8 @@ class Query implements DatabaseAwareInterface
     /**
      * Return all the parameters that have been provided for this query.
      *
+     * @psalm-mutation-free
+     *
      * @return array<non-empty-string,Parameter> Query parameter values
      */
     public function getParameters(): array
@@ -70,6 +78,8 @@ class Query implements DatabaseAwareInterface
     /**
      * Determine if any parameters have been provided for this query.
      *
+     * @psalm-mutation-free
+     *
      * @return bool Query has parameter values.
      */
     public function hasParameters(): bool
@@ -79,6 +89,8 @@ class Query implements DatabaseAwareInterface
 
     /**
      * Return the raw (unprepared) SQL query.
+     *
+     * @psalm-mutation-free
      *
      * @return non-empty-string SQL statement 
      */

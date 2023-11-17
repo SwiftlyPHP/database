@@ -16,12 +16,18 @@ trait DatabaseAwareTrait
 {
     protected ?Database $database;
 
-    public function getDatabase(): ?Database
+    /**
+     * @psalm-mutation-free
+     */
+    final public function getDatabase(): ?Database
     {
         return $this->database;
     }
 
-    public function setDatabase(?Database $database): void
+    /**
+     * @psalm-external-mutation-free
+     */
+    final public function setDatabase(?Database $database): void
     {
         $this->database = $database;
     }
