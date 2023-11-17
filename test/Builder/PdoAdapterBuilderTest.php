@@ -53,59 +53,54 @@ class PdoAdapterBuilderTest extends TestCase
 
     public function testCanConfigureHostnameAndPort(): void
     {
-        $this->builder
-            ->setHostname('127.0.0.1')
-            ->setPort(4242);
-
         self::expectDsn('test:host=127.0.0.1;port=4242');
 
-        $this->builder->create();
+        $this->builder
+            ->setHostname('127.0.0.1')
+            ->setPort(4242)
+            ->create();
     }
 
     public function testCanConfigureUnixSocket(): void
     {
-        $this->builder
-            ->setSocket('/var/run/database.sock');
-
         self::expectDsn('test:unix_socket=/var/run/database.sock');
 
-        $this->builder->create();
+        $this->builder
+            ->setSocket('/var/run/database.sock')
+            ->create();
     }
 
     public function testCanConfigureUsernameAndPassword(): void
     {
-        $this->builder
-            ->setHostname('localhost')
-            ->setUsername('root')
-            ->setPassword('123');
-
         self::expectDsn('test:host=localhost;user=root;password=123');
         self::expectUsername('root');
         self::expectPassword('123');
 
-        $this->builder->create();
+        $this->builder
+            ->setHostname('localhost')
+            ->setUsername('root')
+            ->setPassword('123')
+            ->create();
     }
 
     public function testCanConfigureDatabase(): void
     {
-        $this->builder
-            ->setHostname('localhost')
-            ->setDatabase('sales');
-
         self::expectDsn('test:host=localhost;dbname=sales');
 
-        $this->builder->create();
+        $this->builder
+            ->setHostname('localhost')
+            ->setDatabase('sales')
+            ->create();
     }
 
     public function testCanConfigureCharset(): void
     {
-        $this->builder
-            ->setHostname('localhost')
-            ->setCharset('utf8');
-
         self::expectDsn('test:host=localhost;charset=utf8');
 
-        $this->builder->create();
+        $this->builder
+            ->setHostname('localhost')
+            ->setCharset('utf8')
+            ->create();
     }
 
     public function testCanConfigurePdoAttribute(): void
@@ -122,31 +117,31 @@ class PdoAdapterBuilderTest extends TestCase
 
     public function testCanConfigureDatabaseOption(): void
     {
+        self::expectOptions(['timeout' => 1000, 'verbose' => false]);
+
         $this->builder
             ->setHostname('localhost')
             ->setOption('timeout', 1000)
-            ->setOption('verbose', false);
-
-        self::expectOptions(['timeout' => 1000, 'verbose' => false]);
-
-        $this->builder->create();
+            ->setOption('verbose', false)
+            ->create();
     }
 
     public function testCanCreateAdapterFromConfiguration(): void
     {
-        $this->builder
+        self::expectDsnMatches('/^test:host=localhost;user=root;password=123/');
+        self::expectUsername('root');
+        self::expectPassword('123');
+        self::expectOptions(['verbose' => false]);
+
+        $adapter = $this->builder
             ->setHostname('localhost')
             ->setUsername('root')
             ->setPassword('123')
             ->setDatabase('sales')
             ->setCharset('utf8')
             ->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION)
-            ->setOption('verbose', false);
-
-        self::expectDsnMatches('/^test:host=localhost;user=root;password=123/');
-        self::expectUsername('root');
-        self::expectPassword('123');
-        self::expectOptions(['verbose' => false]);
+            ->setOption('verbose', false)
+            ->create();
 
         $adapter = $this->builder->create();
 
@@ -189,6 +184,8 @@ class PdoAdapterBuilderTest extends TestCase
     public function testCanResetFactory(): void
     {
         $this->builder->setHostname('localhost');
+
+        $count = 0;
 
         PdoAdapterBuilder::setFactory(function () use (&$count) {
             $count++;
