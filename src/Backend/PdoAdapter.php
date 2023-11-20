@@ -8,7 +8,7 @@ use Swiftly\Database\Collection;
 use PDOStatement;
 use PDOException;
 use Swiftly\Database\Exception\QueryException;
-use Swiftly\Database\Parameter;
+use Swiftly\Database\AbstractParameter;
 
 use function is_array;
 use function implode;
@@ -128,14 +128,10 @@ class PdoAdapter implements BackendInterface
      * from handling array values in the case of `WHERE-IN` statements we do no
      * further processing.
      */
-    public function escape(Parameter $parameter): string
+    public function escape(AbstractParameter $parameter): string
     {
-        $value = $parameter->value;
+        // TODO: Implement parameter logic
 
-        if (is_array($value)) {
-            $value = implode(',', $value);
-        }
-
-        return (string)$value;
+        return (string)$parameter->value;
     }
 }

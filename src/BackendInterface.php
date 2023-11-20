@@ -6,7 +6,7 @@ use Swiftly\Database\Exception\UnauthorisedOperationException;
 use Swiftly\Database\Exception\UnsupportedOperationException;
 use Swiftly\Database\Exception\QueryException;
 use Swiftly\Database\Collection;
-use Swiftly\Database\Parameter;
+use Swiftly\Database\AbstractParameter;
 
 /**
  * Interface allowing communication with a specific database backend.
@@ -34,8 +34,8 @@ interface BackendInterface
     /**
      * Escape a parameter value for safe inclusion within an SQL statement.
      *
-     * @param Parameter $parameter The parameter to escape
-     * @return string              Escaped parameter string
+     * @param AbstractParameter $parameter The parameter to escape
+     * @return string                      Escaped parameter string
      */
-    public function escape(Parameter $parameter): string;
+    public function escape(AbstractParameter $parameter): string;
 }

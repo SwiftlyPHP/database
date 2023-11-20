@@ -97,7 +97,7 @@ class PdoAdapterBuilder implements BuilderInterface
      * Creates a new PDO instance.
      *
      * Either returns a native PDO instance or, if a factory function has been
-     * provided, the instance returned by the factory.
+     * provided, the instance returned by calling the function.
      *
      * @param string $dsn                   Database DSN string
      * @param string|null $username         Database user

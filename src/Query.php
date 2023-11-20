@@ -2,9 +2,10 @@
 
 namespace Swiftly\Database;
 
-use Swiftly\Database\Parameter;
 use Swiftly\Database\DatabaseAwareInterface;
 use Swiftly\Database\DatabaseAwareTrait;
+use Swiftly\Database\AbstractParameter;
+use Swiftly\Database\ParameterProcessor;
 use Swiftly\Database\Exception\OrphanedQueryException;
 use Swiftly\Database\Collection;
 
@@ -30,7 +31,7 @@ class Query implements DatabaseAwareInterface
     /** @var non-empty-string $query */
     private string $query;
 
-    /** @var array<non-empty-string,Parameter> $parameters */
+    /** @var array<non-empty-string,AbstractParameter> $parameters */
     private array $parameters;
 
     /**
@@ -58,7 +59,7 @@ class Query implements DatabaseAwareInterface
      */
     public function setParameter(string $name, $value): self
     {
-        $this->parameters[$name] = new Parameter($name, $value);
+        $this->parameters[$name] = ParameterProcessor::infer($name, $value);
 
         return $this;
     }
@@ -68,7 +69,7 @@ class Query implements DatabaseAwareInterface
      *
      * @psalm-mutation-free
      *
-     * @return array<non-empty-string,Parameter> Query parameter values
+     * @return array<non-empty-string,AbstractParameter> Query parameter values
      */
     public function getParameters(): array
     {
@@ -115,7 +116,7 @@ class Query implements DatabaseAwareInterface
     {
         $database = $this->getDatabase();
 
-        if ($database === null) {
+        if (null === $database) {
             throw OrphanedQueryException::create();
         }
 

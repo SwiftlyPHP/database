@@ -7,21 +7,22 @@ namespace Swiftly\Database;
  *
  * @package Query
  *
+ * @template TVal
  * @psalm-immutable
  */
-class Parameter
+abstract class AbstractParameter
 {
     /** @var non-empty-string $name */
     public string $name;
 
-    /** @var scalar|list<scalar> $value */
+    /** @var TVal $value */
     public $value;
 
     /**
      * Create a new parameter with the given name and value.
      *
-     * @param non-empty-string $name     Parameter name
-     * @param scalar|list<scalar> $value Value to be escaped
+     * @param non-empty-string $name Parameter name
+     * @param TVal $value            Parameter value
      */
     public function __construct(string $name, $value)
     {
