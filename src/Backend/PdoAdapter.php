@@ -9,8 +9,14 @@ use PDOStatement;
 use PDOException;
 use Swiftly\Database\Exception\QueryException;
 use Swiftly\Database\AbstractParameter;
+use Swiftly\Database\Parameter\SetParameter;
+use Swiftly\Database\Parameter\BooleanParameter;
+use Swiftly\Database\Parameter\IntegerParameter;
 
-use function is_array;
+use function preg_quote;
+use function preg_replace_callback;
+use function is_bool;
+use function is_int;
 use function implode;
 
 /**
@@ -44,16 +50,16 @@ class PdoAdapter implements BackendInterface
     /** {@inheritDoc} */
     public function execute(string $sql, array $parameters = []): ?Collection
     {
-        $statement = $this->pdo->prepare($sql);
+        $statement = $this->prepare($sql, $parameters);
 
-        foreach ($parameters as $name => $value) {
-            $statement->bindValue($name, $value, PDO::PARAM_STR);
+        foreach ($parameters as $value) {
+            self::bindValue($statement, $value);
         }
 
         $status = $this->doQuery($statement);
 
         $result = $status
-            ? $this->prepareResult($statement)
+            ? self::prepareResult($statement)
             : null;
 
         return $result;
@@ -112,7 +118,7 @@ class PdoAdapter implements BackendInterface
      * @param PDOStatement $statement Executed PDO statement
      * @return Collection             Query results
      */
-    private function prepareResult(PDOStatement $statement): Collection
+    private static function prepareResult(PDOStatement $statement): Collection
     {
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -122,16 +128,125 @@ class PdoAdapter implements BackendInterface
     }
 
     /**
-     * {@inheritDoc}
+     * Prepare the given SQL query and return a ready-to-execute PDO statement.
      *
-     * This adapter relies on {@see PDO::bindValue} to escape values, so apart
-     * from handling array values in the case of `WHERE-IN` statements we do no
-     * further processing.
+     * Additionally, this method also handles inserting sets/lists into the SQL
+     * as PDO does not currently support binding arrays of values.
+     *
+     * @param non-empty-string $sql                       SQL query to prepare
+     * @param array<string,AbstractParameter> $parameters Query parameters
      */
-    public function escape(AbstractParameter $parameter): string
+    private function prepare(string $sql, array $parameters): PDOStatement
     {
-        // TODO: Implement parameter logic
+        $parameters_to_replace = self::filterSets($parameters);
 
-        return (string)$parameter->value;
+        foreach ($parameters_to_replace as $name => $replace) {
+            $sql = $this->replaceParameter($sql, $name, $replace->value);
+        }
+
+        return $this->pdo->prepare($sql);
+    }
+
+    /**
+     * Filter an array of parameters keeping only those who have array values.
+     *
+     * @param array<string,AbstractParameter> $parameters Parameters to filter
+     * @return array<string,SetParameter>                 Filtered parameters
+     */
+    private static function filterSets(array $parameters): array
+    {
+        $sets = [];
+
+        foreach ($parameters as $name => $parameter) {
+            if ($parameter instanceof SetParameter) {
+                $sets[$name] = $parameter;
+            }
+        }
+
+        return $sets;
+    }
+
+    /**
+     * Replace a placeholder name in a query with its list of values.
+     *
+     * @param non-empty-string $sql SQL query to update
+     * @param string $name          Parameter to replace
+     * @param array<scalar> $values Values to insert
+     */
+    private function replaceParameter(
+        string $sql,
+        string $name,
+        array $values
+    ): string {
+        $regex = '/\:' . preg_quote($name, '/') . '/';
+
+        return preg_replace_callback($regex, function () use ($values) {
+            return $this->setToString($values);
+        }, $sql);
+    }
+
+    /**
+     * Convert a list/set of values into a safe string for SQL insertion.
+     *
+     * @param array<scalar> $values Parameter list
+     * @return string
+     */
+    private function setToString(array $values): string
+    {
+        $escaped = [];
+
+        foreach ($values as $value) {
+            if (is_bool($value)) {
+                $type = PDO::PARAM_BOOL;
+            } elseif (is_int($value)) {
+                $type = PDO::PARAM_INT;
+            } else {
+                $type = PDO::PARAM_STR;
+            }
+
+            $escaped[] = $this->pdo->quote($value, $type);
+        }
+
+        return '(' . implode(',', $escaped) . ')';
+    }
+
+    /**
+     * Return the appropriate `PDO::PARAM_*` type to use for a given parameter.
+     *
+     * @upgrade Swap to match exp at php 8
+     * @psalm-return PDO::PARAM_*
+     *
+     * @param AbstractParameter $parameter Query parameter to insert
+     * @return int                         PDO parameter type
+     */
+    private static function getParamType(AbstractParameter $parameter): int
+    {
+        switch (true) {
+            case $parameter instanceof BooleanParameter:
+                return PDO::PARAM_BOOL;
+            case $parameter instanceof IntegerParameter:
+                return PDO::PARAM_INT;
+            default:
+                return PDO::PARAM_STR;
+        }
+    }
+
+    /**
+     * Bind a parameter to the query, choosing the most appropriate data type.
+     *
+     * @upgrade Swap to match at php 8
+     *
+     * @param PDOStatement $statement      PDO statement to be executed
+     * @param AbstractParameter $parameter Parameter to be bound
+     */
+    private static function bindValue(
+        PDOStatement $statement,
+        AbstractParameter $parameter
+    ): void {
+        $statement->bindValue(
+            $parameter->name,
+            $parameter->value,
+            self::getParamType($parameter)
+        );
     }
 }

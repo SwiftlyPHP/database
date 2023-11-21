@@ -49,10 +49,7 @@ class Database
     public function execute(Query $query): ?Collection
     {
         $sql = $query->getQuery();
-
-        $parameters = $query->hasParameters()
-            ? $this->prepareParameters($query->getParameters())
-            : [];
+        $parameters = $query->getParameters();
 
         return $this->backend->execute($sql, $parameters);
     }
@@ -162,23 +159,6 @@ class Database
 
         $this->backend->startTransaction();
         $this->inTransaction = true;
-    }
-
-    /**
-     * Escape parameters to prepare them for use in an SQL query.
-     *
-     * @param array<non-empty-string,Parameter> $parameters Parameters to escape
-     * @return array<non-empty-string,string>               Escaped parameters
-     */
-    private function prepareParameters(array $parameters): array
-    {
-        $prepared = [];
-
-        foreach ($parameters as $parameter) {
-            $prepared[$parameter->name] = $this->backend->escape($parameter);
-        }
-
-        return $prepared;
     }
 
     /**

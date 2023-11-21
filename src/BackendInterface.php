@@ -18,9 +18,12 @@ interface BackendInterface
     /**
      * Execute the given SQL statement and return the result.
      *
-     * @param non-empty-string $sql                      SQL statement
-     * @param array<non-empty-string,string> $parameters Parameter values
-     * @return Collection|null                           Query result collection
+     * The provided parameters **HAVE NOT** been escaped by this point, it is up
+     * to implementors to handle their own sanitation and quoting.
+     *
+     * @param non-empty-string $sql                       SQL statement
+     * @param array<string,AbstractParameter> $parameters Parameter values
+     * @return Collection|null                            Query results
      *
      * @throws UnauthorisedOperationException
      *      If the database user lacks the permission required for the command
@@ -30,12 +33,4 @@ interface BackendInterface
      *      If any other error occurs while querying the database
      */
     public function execute(string $sql, array $parameters = []): ?Collection;
-
-    /**
-     * Escape a parameter value for safe inclusion within an SQL statement.
-     *
-     * @param AbstractParameter $parameter The parameter to escape
-     * @return string                      Escaped parameter string
-     */
-    public function escape(AbstractParameter $parameter): string;
 }
