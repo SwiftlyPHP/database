@@ -8,7 +8,7 @@ use PDOException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Swiftly\Database\Backend\PdoAdapter;
-use Swiftly\Database\Parameter;
+use Swiftly\Database\AbstractParameter;
 use Swiftly\Database\Collection;
 use Swiftly\Database\Exception\QueryException;
 
@@ -32,46 +32,6 @@ class PdoAdapterTest extends TestCase
         );
     }
 
-    /** @return MockObject&Parameter */
-    private function createMockParameter(string $name, $value): MockObject
-    {
-        $parameter = self::createMock(Parameter::class);
-        $parameter->name = $name;
-        $parameter->value = $value;
-
-        return $parameter;
-    }
-
-    public function provideExampleParameters(): array
-    {
-        return [
-            'string parameter' => [
-                $this->createMockParameter('test', 'active'),
-                'active'
-            ],
-            'int parameter' => [
-                $this->createMockParameter('test', 42),
-                '42'
-            ],
-            'float parameter' => [
-                $this->createMockParameter('test', 3.14),
-                '3.14'
-            ],
-            'array parameter' => [
-                $this->createMockParameter('test', [1, 2, 3]),
-                '1,2,3'
-            ]
-        ];
-    }
-
-    /** @dataProvider provideExampleParameters */
-    public function testCanEscapeParameterValue(Parameter $parameter, string $expected): void
-    {
-        $value = $this->adapter->escape($parameter);
-
-        self::assertSame($expected, $value);
-    }
-
     public function testCanExecuteQuery(): void
     {
         $statement = self::createMock(PDOStatement::class);
@@ -88,6 +48,10 @@ class PdoAdapterTest extends TestCase
 
     public function testCanExecuteQueryWithParameter(): void
     {
+        $parameter = self::createMock(AbstractParameter::class);
+        $parameter->name = 'name';
+        $parameter->value = 'John';
+
         $statement = self::createMock(PDOStatement::class);
         $statement->expects(self::once())
             ->method('bindValue')
@@ -101,7 +65,7 @@ class PdoAdapterTest extends TestCase
             ->willReturn($statement);
 
         $this->adapter->execute(self::EXAMPLE_SELECT_WHERE, [
-            'name' => 'John'
+            'name' => $parameter
         ]);
     }
 

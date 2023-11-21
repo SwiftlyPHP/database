@@ -9,7 +9,8 @@ use Swiftly\Database\Database;
 
 /**
  * @covers \Swiftly\Database\Query
- * @uses \Swiftly\Database\Parameter
+ * @uses \Swiftly\Database\AbstractParameter
+ * @uses \Swiftly\Database\ParameterProcessor
  */
 class QueryTest extends TestCase
 {

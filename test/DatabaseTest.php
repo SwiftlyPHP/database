@@ -8,7 +8,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Swiftly\Database\Database;
 use Swiftly\Database\BackendInterface;
 use Swiftly\Database\TransactionInterface;
-use Swiftly\Database\Parameter;
+use Swiftly\Database\AbstractParameter;
 use Swiftly\Database\Query;
 use Swiftly\Database\Collection;
 use Swiftly\Database\Exception\TransactionException;
@@ -68,8 +68,8 @@ class DatabaseTest extends TestCase
             ->method('getQuery')
             ->willReturn(self::EXAMPLE_SELECT);
         $query->expects(self::once())
-            ->method('hasParameters')
-            ->willReturn(false);
+            ->method('getParameters')
+            ->willReturn([]);
 
         $this->backend->expects(self::once())
             ->method('execute')
@@ -80,7 +80,7 @@ class DatabaseTest extends TestCase
 
     public function testCanExecuteQueryWithParameter(): void
     {
-        $parameter = self::createMock(Parameter::class);
+        $parameter = self::createMock(AbstractParameter::class);
         $parameter->name = 'name';
         $parameter->value = 'John';
 
@@ -89,19 +89,12 @@ class DatabaseTest extends TestCase
             ->method('getQuery')
             ->willReturn(self::EXAMPLE_SELECT_WHERE);
         $query->expects(self::once())
-            ->method('hasParameters')
-            ->willReturn(true);
-        $query->expects(self::once())
             ->method('getParameters')
             ->willReturn(['name' => $parameter]);
 
         $this->backend->expects(self::once())
-            ->method('escape')
-            ->with($parameter)
-            ->willReturn('John');
-        $this->backend->expects(self::once())
             ->method('execute')
-            ->with(self::EXAMPLE_SELECT_WHERE, ['name' => 'John']);
+            ->with(self::EXAMPLE_SELECT_WHERE, ['name' => $parameter]);
 
         $this->database->execute($query);
     }
@@ -113,8 +106,8 @@ class DatabaseTest extends TestCase
             ->method('getQuery')
             ->willReturn(self::EXAMPLE_SELECT);
         $query->expects(self::once())
-            ->method('hasParameters')
-            ->willReturn(false);
+            ->method('getParameters')
+            ->willReturn([]);
 
         $collection = self::createMock(Collection::class);
 
