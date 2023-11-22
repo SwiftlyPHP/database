@@ -1,6 +1,8 @@
 {
     "name": "swiftly/database",
     "description": "Handle database queries with ease.",
+    "homepage": "https://github.com/SwiftlyPHP/database/",
+    "version": "1.0.0",
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -14,8 +16,9 @@
         }
     },
     "scripts": {
-        "lint": "@php vendor/bin/php-cs-fixer check --diff",
+        "test": "@php -d xdebug.mode=coverage vendor/bin/phpunit",
         "fix": "@php vendor/bin/php-cs-fixer fix",
+        "lint": "@php vendor/bin/php-cs-fixer check --diff",
         "analyse": "@php vendor/bin/psalm --show-info=true --no-cache",
         "check": ["@lint", "@analyse"]
     },

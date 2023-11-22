@@ -18,6 +18,8 @@ use Exception;
  */
 class Database
 {
+    public const TRANSACTION_ABORT = false;
+
     private BackendInterface $backend;
     private bool $inTransaction;
 
@@ -108,7 +110,7 @@ class Database
         $this->startTransaction();
 
         try {
-            if (false === ($result = $callback($this))) {
+            if (self::TRANSACTION_ABORT === ($result = $callback($this))) {
                 $this->backend->abortTransaction();
             } else {
                 $this->backend->commitTransaction();

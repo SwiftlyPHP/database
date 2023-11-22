@@ -15,8 +15,7 @@ use Swiftly\Database\Parameter\IntegerParameter;
 
 use function preg_quote;
 use function preg_replace_callback;
-use function is_bool;
-use function is_int;
+use function is_string;
 use function implode;
 
 /**
@@ -198,11 +197,9 @@ class PdoAdapter implements BackendInterface
         $escaped = [];
 
         foreach ($values as $value) {
-            if (is_string($value)) {
-                $escaped[] = $this->pdo->quote($value, PDO::PARAM_STR);
-            } else {
-                $escaped[] = (string)$value;
-            }
+            $escaped[] = is_string($value)
+                ? $this->pdo->quote($value, PDO::PARAM_STR)
+                : (string)$value;
         }
 
         return '(' . implode(',', $escaped) . ')';

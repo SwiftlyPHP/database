@@ -24,7 +24,7 @@ class QueryException extends Exception implements ExceptionInterface
     {
         return new self(
             $exception->getMessage(),
-            $exception->getCode(),
+            (int)$exception->getCode(),
             $exception
         );
     }
