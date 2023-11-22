@@ -14,6 +14,10 @@ use function implode;
  *
  * @see \Swiftly\Database\Backend\PdoAdapter
  *
+ * @psalm-type StatementClass = list{class-string,mixed[]}
+ * @psalm-type AttrFlag = PDO::CASE_*|PDO::ERRMODE_*|PDO::NULL_*|PDO::FETCH_*
+ * @psalm-type AttrValue = bool|AttrFlag|StatementClass
+ *
  * @package Builder
  */
 class PdoAdapterBuilder implements BuilderInterface
@@ -28,7 +32,7 @@ class PdoAdapterBuilder implements BuilderInterface
     private ?string $password = null;
     /** @var array<string,scalar> $options */
     private array $options = [];
-    /** @var array<int,mixed> $attributes */
+    /** @var array<int,AttrValue> $attributes */
     private array $attributes = [];
 
     /** @var ?callable(string,?string,?string,array<string,scalar>):PDO */
@@ -231,8 +235,8 @@ class PdoAdapterBuilder implements BuilderInterface
      *
      * @psalm-param PDO::ATTR_* $attribute
      *
-     * @param int $attribute Attribute to set
-     * @param mixed $value   Attribute value
+     * @param int $attribute   Attribute to set
+     * @param AttrValue $value Attribute value
      * @return self
      */
     public function setAttribute(int $attribute, $value): self

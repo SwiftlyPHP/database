@@ -172,6 +172,7 @@ class PdoAdapter implements BackendInterface
      * @param non-empty-string $sql SQL query to update
      * @param string $name          Parameter to replace
      * @param array<scalar> $values Values to insert
+     * @return non-empty-string     Updated SQL query
      */
     private function replaceParameter(
         string $sql,
@@ -180,6 +181,7 @@ class PdoAdapter implements BackendInterface
     ): string {
         $regex = '/\:' . preg_quote($name, '/') . '/';
 
+        /** @var non-empty-string */
         return preg_replace_callback($regex, function () use ($values) {
             return $this->setToString($values);
         }, $sql);
