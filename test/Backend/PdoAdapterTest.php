@@ -9,6 +9,9 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Swiftly\Database\Backend\PdoAdapter;
 use Swiftly\Database\AbstractParameter;
+use Swiftly\Database\Parameter\SetParameter;
+use Swiftly\Database\Parameter\BooleanParameter;
+use Swiftly\Database\Parameter\IntegerParameter;
 use Swiftly\Database\Collection;
 use Swiftly\Database\Exception\QueryException;
 
@@ -66,6 +69,91 @@ class PdoAdapterTest extends TestCase
 
         $this->adapter->execute(self::EXAMPLE_SELECT_WHERE, [
             'name' => $parameter
+        ]);
+    }
+
+    public function testWillExpandSetParameter(): void
+    {
+        $parameter = self::createMock(SetParameter::class);
+        $parameter->name = 'ids';
+        $parameter->value = [1, 2, 3];
+
+        $statement = self::createMock(PDOStatement::class);
+
+        $this->pdo->expects(self::once())
+            ->method('prepare')
+            ->with('SELECT * FROM users WHERE id IN (1,2,3)')
+            ->willReturn($statement);
+
+        $this->adapter->execute('SELECT * FROM users WHERE id IN :ids', [
+            'ids' => $parameter
+        ]);
+    }
+
+    public function testWillEscapeStringsInSetParameter(): void
+    {
+        $parameter = self::createMock(SetParameter::class);
+        $parameter->name = 'names';
+        $parameter->value = ['John', 'Jack', 'Jill'];
+
+        $statement = self::createMock(PDOStatement::class);
+
+        $this->pdo->expects(self::exactly(3))
+            ->method('quote')
+            ->willReturnMap([
+                ['John', PDO::PARAM_STR, '"John"'],
+                ['Jack', PDO::PARAM_STR, '"Jack"'],
+                ['Jill', PDO::PARAM_STR, '"Jill"']
+            ]);
+        $this->pdo->expects(self::once())
+            ->method('prepare')
+            ->with('SELECT * FROM users WHERE name IN ("John","Jack","Jill")')
+            ->willReturn($statement);
+
+        $this->adapter->execute('SELECT * FROM users WHERE name IN :names', [
+            'names' => $parameter
+        ]);
+    }
+
+    public function testWillNotStringifyBooleanParameters(): void
+    {
+        $parameter = self::createMock(BooleanParameter::class);
+        $parameter->name = 'status';
+        $parameter->value = true;
+
+        $statement = self::createMock(PDOStatement::class);
+        $statement->expects(self::once())
+            ->method('bindValue')
+            ->with('status', true, PDO::PARAM_BOOL);
+
+        $this->pdo->expects(self::once())
+            ->method('prepare')
+            ->with('SELECT * FROM users WHERE status = :status')
+            ->willReturn($statement);
+        
+        $this->adapter->execute('SELECT * FROM users WHERE status = :status', [
+            'status' => $parameter
+        ]);
+    }
+
+    public function testWillNotStringifyIntegerParameters(): void
+    {
+        $parameter = self::createMock(IntegerParameter::class);
+        $parameter->name = 'id';
+        $parameter->value = 42;
+
+        $statement = self::createMock(PDOStatement::class);
+        $statement->expects(self::once())
+            ->method('bindValue')
+            ->with('id', 42, PDO::PARAM_INT);
+
+        $this->pdo->expects(self::once())
+            ->method('prepare')
+            ->with('SELECT * FROM users WHERE id = :id')
+            ->willReturn($statement);
+        
+        $this->adapter->execute('SELECT * FROM users WHERE id = :id', [
+            'id' => $parameter
         ]);
     }
 

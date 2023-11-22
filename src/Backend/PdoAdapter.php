@@ -196,15 +196,11 @@ class PdoAdapter implements BackendInterface
         $escaped = [];
 
         foreach ($values as $value) {
-            if (is_bool($value)) {
-                $type = PDO::PARAM_BOOL;
-            } elseif (is_int($value)) {
-                $type = PDO::PARAM_INT;
+            if (is_string($value)) {
+                $escaped[] = $this->pdo->quote($value, PDO::PARAM_STR);
             } else {
-                $type = PDO::PARAM_STR;
+                $escaped[] = (string)$value;
             }
-
-            $escaped[] = $this->pdo->quote($value, $type);
         }
 
         return '(' . implode(',', $escaped) . ')';
