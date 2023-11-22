@@ -4,7 +4,7 @@ namespace Swiftly\Database\Test;
 
 use PHPUnit\Framework\TestCase;
 use Swiftly\Database\Query;
-use Swiftly\Database\Exception\OrphanedQueryException;
+use Swiftly\Database\Exception\AdapterException;
 use Swiftly\Database\Database;
 
 /**
@@ -49,10 +49,10 @@ class QueryTest extends TestCase
         self::assertSame('bar', $parameters['foo']->value);
     }
 
-    /** @covers \Swiftly\Database\Exception\OrphanedQueryException */
+    /** @covers \Swiftly\Database\Exception\AdapterException */
     public function testWillThrowIfNoDatabaseConnected(): void
     {
-        self::expectException(OrphanedQueryException::class);
+        self::expectException(AdapterException::class);
 
         $this->query->execute();
     }

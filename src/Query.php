@@ -6,7 +6,7 @@ use Swiftly\Database\DatabaseAwareInterface;
 use Swiftly\Database\DatabaseAwareTrait;
 use Swiftly\Database\AbstractParameter;
 use Swiftly\Database\ParameterProcessor;
-use Swiftly\Database\Exception\OrphanedQueryException;
+use Swiftly\Database\Exception\AdapterException;
 use Swiftly\Database\Collection;
 
 /**
@@ -109,7 +109,7 @@ class Query implements DatabaseAwareInterface
      *
      * @return Collection|null Collection containing query results
      *
-     * @throws OrphanedQueryException
+     * @throws AdapterException
      *      If executing a query that is not associated with a database
      */
     public function execute(): ?Collection
@@ -117,7 +117,7 @@ class Query implements DatabaseAwareInterface
         $database = $this->getDatabase();
 
         if (null === $database) {
-            throw OrphanedQueryException::create();
+            throw AdapterException::createForOrphanedQuery();
         }
 
         return $database->execute($this);

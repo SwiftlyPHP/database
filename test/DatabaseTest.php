@@ -12,7 +12,7 @@ use Swiftly\Database\AbstractParameter;
 use Swiftly\Database\Query;
 use Swiftly\Database\Collection;
 use Swiftly\Database\Exception\TransactionException;
-use Swiftly\Database\Exception\UnsupportedOperationException;
+use Swiftly\Database\Exception\AdapterException;
 
 /**
  * @covers \Swiftly\Database\Database
@@ -219,10 +219,10 @@ class DatabaseTest extends TestCase
         });
     }
 
-    /** @covers \Swiftly\Database\Exception\UnsupportedOperationException */
+    /** @covers \Swiftly\Database\Exception\AdapterException */
     public function testWillThrowIfAdapterDoesNotSupportTransactions(): void
     {
-        self::expectException(UnsupportedOperationException::class);
+        self::expectException(AdapterException::class);
 
         $this->database->withTransaction(function () {});
     }

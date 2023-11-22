@@ -4,8 +4,8 @@ namespace Swiftly\Database;
 
 use Swiftly\Database\BackendInterface;
 use Swiftly\Database\Query;
-use Swiftly\Database\Exception\UnauthorisedOperationException;
-use Swiftly\Database\Exception\UnsupportedOperationException;
+use Swiftly\Database\Exception\QueryException;
+use Swiftly\Database\Exception\AdapterException;
 use Swiftly\Database\Collection;
 use Swiftly\Database\TransactionInterface;
 use Swiftly\Database\Exception\TransactionException;
@@ -41,9 +41,9 @@ class Database
      * @param Query $query     Configured query object
      * @return Collection|null Collection containing query results
      *
-     * @throws UnauthorisedOperationException
+     * @throws QueryException
      *      If the current database user does not have the permissions needed
-     * @throws UnsupportedOperationException
+     * @throws AdapterException
      *      If the current database does not support the requested operation
      */
     public function execute(Query $query): ?Collection
@@ -98,7 +98,7 @@ class Database
      * @param callable $callback User provided function
      * @return mixed             Callback result
      *
-     * @throws UnsupportedOperationException
+     * @throws AdapterException
      *      If the current adapter does not support transactions
      * @throws TransactionException
      *      If a transaction error occurs
@@ -142,7 +142,7 @@ class Database
      *
      * @psalm-assert TransactionInterface $this->backend
      *
-     * @throws UnsupportedOperationException
+     * @throws AdapterException
      *      If the current adapter does not support transactions
      * @throws TransactionException
      *      If there is already a transaction ongoing
@@ -150,11 +150,11 @@ class Database
     private function startTransaction(): void
     {
         if (!$this->hasTransactionSupport()) {
-            throw UnsupportedOperationException::transaction($this->backend);
+            throw AdapterException::createForTransaction($this->backend);
         }
 
         if (true === $this->inTransaction) {
-            throw TransactionException::inProgress();
+            throw TransactionException::createInProgress();
         }
 
         $this->backend->startTransaction();
@@ -167,6 +167,19 @@ class Database
      * Does not actually execute the query - instead it creates a new statement
      * which can be further configured using the methods on the returned `Query`
      * object.
+     *
+     * ```php
+     * <?php
+     *
+     * use Swiftly\Database\Database;
+     *
+     * $database = new Database(...);
+     *
+     * $result = $database
+     *      ->query('SELECT * FROM users WHERE id = :id')
+     *      ->setParameter('id', 42)
+     *      ->execute();
+     * ```
      *
      * @see \Swiftly\Database\Query
      *

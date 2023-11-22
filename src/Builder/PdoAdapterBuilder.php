@@ -16,7 +16,7 @@ use function implode;
  *
  * @psalm-type StatementClass = list{class-string,mixed[]}
  * @psalm-type AttrFlag = PDO::CASE_*|PDO::ERRMODE_*|PDO::NULL_*|PDO::FETCH_*
- * @psalm-type AttrValue = bool|AttrFlag|StatementClass
+ * @psalm-type AttrValue = bool|int|AttrFlag|StatementClass
  *
  * @package Builder
  */

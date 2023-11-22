@@ -35,7 +35,7 @@ class TransactionException extends Exception implements ExceptionInterface
      *
      * @return self Transaction exception
      */
-    public static function inProgress(): self
+    public static function createInProgress(): self
     {
         return new self(
             'Failed starting new transaction as one is already in progress!'
