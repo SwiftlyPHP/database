@@ -79,6 +79,7 @@ class PdoAdapter implements BackendInterface
      */
     private function doQuery(PDOStatement $statement): bool
     {
+        /** @var int|null $error_mode */
         $error_mode = $this->pdo->getAttribute(PDO::ATTR_ERRMODE);
 
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

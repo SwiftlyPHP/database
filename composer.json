@@ -2,7 +2,6 @@
     "name": "swiftly/database",
     "description": "Handle database queries with ease.",
     "homepage": "https://github.com/SwiftlyPHP/database/",
-    "version": "1.0.0",
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -23,7 +22,9 @@
         "check": ["@lint", "@analyse"]
     },
     "require": {
-        "php": "^7.4 || ^8.0",
+        "php": "^7.4 || ^8.0"
+    },
+    "suggest": {
         "ext-pdo": "*"
     },
     "require-dev": {
