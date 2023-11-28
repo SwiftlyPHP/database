@@ -7,6 +7,7 @@ use Countable;
 use Iterator;
 
 use function count;
+use function reset;
 
 /**
  * Stores the returned results of an executed SQL query.
@@ -48,6 +49,29 @@ class Collection implements IteratorAggregate, Countable
     public function count(): int
     {
         return count($this->rows);
+    }
+
+    /**
+     * Determine if this collection is empty.
+     *
+     * @return bool Collection has items
+     */
+    public function isEmpty(): bool
+    {
+        return empty($this->rows);
+    }
+
+    /**
+     * Returns the first item of the collection.
+     *
+     * Interally uses PHP's array {@see reset} function so this SHOULD NOT be
+     * called from within a loop.
+     *
+     * @return TVal Collection item
+     */
+    public function first()
+    {
+        return reset($this->rows);
     }
 
     /**
