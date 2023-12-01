@@ -13,6 +13,23 @@ use function array_values;
  * Sets are simple lists of values that are commonly used for `WHERE...IN`
  * operations.
  *
+ * For example:
+ *
+ * ```php
+ * <?php
+ *
+ * use Swiftly\Database\Database;
+ *
+ * $database = new Database(...);
+ * $users = $database
+ *     ->query('SELECT * FROM users WHERE id IN (:ids)')
+ *     ->setParameter('ids', [1, 2, 3])
+ *     ->execute();
+ * ```
+ *
+ * Creates a set of integer values with the name `ids` and inserts them into the
+ * relevant place in the query.
+ *
  * @package Query
  *
  * @psalm-immutable

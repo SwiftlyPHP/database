@@ -85,7 +85,7 @@ class PdoAdapterTest extends TestCase
             ->with('SELECT * FROM users WHERE id IN (1,2,3)')
             ->willReturn($statement);
 
-        $this->adapter->execute('SELECT * FROM users WHERE id IN :ids', [
+        $this->adapter->execute('SELECT * FROM users WHERE id IN (:ids)', [
             'ids' => $parameter
         ]);
     }
@@ -110,7 +110,7 @@ class PdoAdapterTest extends TestCase
             ->with('SELECT * FROM users WHERE name IN ("John","Jack","Jill")')
             ->willReturn($statement);
 
-        $this->adapter->execute('SELECT * FROM users WHERE name IN :names', [
+        $this->adapter->execute('SELECT * FROM users WHERE name IN (:names)', [
             'names' => $parameter
         ]);
     }

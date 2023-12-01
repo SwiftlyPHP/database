@@ -203,7 +203,7 @@ class PdoAdapter implements BackendInterface
                 : (string)$value;
         }
 
-        return '(' . implode(',', $escaped) . ')';
+        return implode(',', $escaped);
     }
 
     /**
@@ -229,8 +229,6 @@ class PdoAdapter implements BackendInterface
 
     /**
      * Bind a parameter to the query, choosing the most appropriate data type.
-     *
-     * @upgrade Swap to match at php 8
      *
      * @param PDOStatement $statement      PDO statement to be executed
      * @param AbstractParameter $parameter Parameter to be bound
