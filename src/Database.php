@@ -70,11 +70,11 @@ class Database
      * <?php
      *
      * $database->withTransaction(function (Database $database) {
-     *      $database
-     *          ->query(...)
-     *          ->execute();
+     *     $database
+     *         ->query(...)
+     *         ->execute();
      *
-     *      return true;
+     *     return true;
      * });
      * ```
      *
@@ -87,7 +87,7 @@ class Database
      * <?php
      *
      * $result = $database->withTransaction(function (Database $database) {
-     *      return 'Hello world';
+     *     return 'Hello world';
      * });
      *
      * assert($result === 'Hello world');
@@ -178,9 +178,9 @@ class Database
      * $database = new Database(...);
      *
      * $result = $database
-     *      ->query('SELECT * FROM users WHERE id = :id')
-     *      ->setParameter('id', 42)
-     *      ->execute();
+     *     ->query('SELECT * FROM users WHERE id = :id')
+     *     ->setParameter('id', 42)
+     *     ->execute();
      * ```
      *
      * @see \Swiftly\Database\Query
