@@ -53,7 +53,7 @@ PdoAdapterBuilder::setFactory(
 
 // Outputs: 'Hi from a custom class!'
 PdoAdapterBuilder::Mysqli()
-    ->setHostname('localhost');
+    ->setHostname('localhost')
     ->create();
 ```
 
