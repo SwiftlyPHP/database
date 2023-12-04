@@ -38,5 +38,5 @@ listening on the (non-standard) port of **3308**.
 ## See Also
 
 * [`PdoAdapterBuilder::setHostname`](./setHostname.md) - To set the hostname of the database
-* [`PdoAdapterBuilder::setUsername`] - To set the username to use for the database
-* [`PdoAdapterBuilder::setPassword`] - To set the password to use for the database
+* [`PdoAdapterBuilder::setUsername`](./setUsername.md) - To set the username to use for the database
+* [`PdoAdapterBuilder::setPassword`](./setPassword.md) - To set the password to use for the database

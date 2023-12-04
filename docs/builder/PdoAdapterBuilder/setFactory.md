@@ -91,7 +91,8 @@ $builder->create(); // $count === 1
 
 Above the factory function is called when `create` is invoked, causing the
 counter to increment. Then we reset the factory, clearing the callback and
-meaning that on the second call to `create` the counter is left untouched.
+meaning that on the second call to `create` the default behaviour is used and
+the counter is left untouched.
 
 ## See Also
 

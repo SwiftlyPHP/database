@@ -37,5 +37,5 @@ The above will create a new [PdoAdapter] connected to a MySQL database at
 ## See Also
 
 * [`PdoAdapterBuilder::setPort`](./setPort.md) - To set the port used to connect to the database
-* [`PdoAdapterBuilder::setUsername`] - To set the username to use for the database
-* [`PdoAdapterBuilder::setPassword`] - To set the password to use for the database
+* [`PdoAdapterBuilder::setUsername`](./setUsername.md) - To set the username to use for the database
+* [`PdoAdapterBuilder::setPassword`](./setPassword.md) - To set the password to use for the database

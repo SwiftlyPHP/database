@@ -42,13 +42,13 @@ class PdoAdapterBuilder implements BuilderInterface
 * [`PdoAdapterBuilder::setHostname`](./setHostname.md) - Sets the hostname of the database
 * [`PdoAdapterBuilder::setSocket`](./setSocket.md) - Sets the UNIX socket used to connect the database
 * [`PdoAdapterBuilder::setPort`](./setPort.md) - Sets the port used to connect to the database
-* [`PdoAdapterBuilder::setDatabase`] - Sets the name of the database to use
-* [`PdoAdapterBuilder::setCharset`] - Sets the character set to use
-* [`PdoAdapterBuilder::setUsername`] - Sets the username to use for the database
-* [`PdoAdapterBuilder::setPassword`] - Sets the password to use for the database
-* [`PdoAdapterBuilder::setOption`] - Sets options to pass to [`PDO::__construct`](https://www.php.net/manual/en/pdo.construct.php)
-* [`PdoAdapterBuilder::setAttribute`] - Sets attributes to pass to [`PDO::setAttribute`](https://www.php.net/manual/en/pdo.setattribute.php)
-* [`PdoAdapterBuilder::create`] - Creates a new adapter with the current configuration
+* [`PdoAdapterBuilder::setDatabase`](./setDatabase.md) - Sets the name of the database to use
+* [`PdoAdapterBuilder::setCharset`](./setCharset.md) - Sets the character set to use
+* [`PdoAdapterBuilder::setUsername`](./setUsername.md) - Sets the username to use for the database
+* [`PdoAdapterBuilder::setPassword`](./setPassword.md) - Sets the password to use for the database
+* [`PdoAdapterBuilder::setOption`](./setOption.md) - Sets an option to pass to [`PDO::__construct`](https://www.php.net/manual/en/pdo.construct.php)
+* [`PdoAdapterBuilder::setAttribute`](./setAttribute.md) - Sets an attribute to pass to [`PDO::setAttribute`](https://www.php.net/manual/en/pdo.setattribute.php)
+* [`PdoAdapterBuilder::create`](./create.md) - Creates a new adapter with the current configuration
 
 ## Usage
 ### Creating a MySQL Adapter
@@ -104,7 +104,6 @@ $adapter = $builder
 $database = new Database($adapter);
 $database->query(...);
 ```
-
 
 ## See Also
 

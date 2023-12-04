@@ -31,7 +31,7 @@ $adapter = PdoAdapterBuilder::Mysql()
 $database = new Database($adapter);
 ```
 
-The above will create a new [PdoAdapter] connected to a MySQL database through
+The above will create a new [PdoAdapter] connected to a MySQL database using
 the socket **/var/run/mysqld/mysqld.sock**.
 
 ## See Also
