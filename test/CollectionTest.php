@@ -23,6 +23,17 @@ final class CollectionTest extends TestCase
         self::assertCount(10, $this->collection);
     }
 
+    public function testCanTellIfCollectionEmpty(): void
+    {
+        self::assertFalse($this->collection->isEmpty());
+        self::assertTrue((new Collection([]))->isEmpty());
+    }
+
+    public function testCanGetFirstItemInCollection(): void
+    {
+        self::assertSame(1, $this->collection->first());
+    }
+
     public function testCanIterateOverItemsInCollection(): void
     {
         $expected_index = 0;
