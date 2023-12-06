@@ -2,7 +2,7 @@
 
 namespace Swiftly\Database;
 
-use Swiftly\Database\BackendInterface;
+use Swiftly\Database\AdapterInterface;
 use Swiftly\Database\Query;
 use Swiftly\Database\Exception\QueryException;
 use Swiftly\Database\Exception\AdapterException;
@@ -20,17 +20,17 @@ class Database
 {
     public const TRANSACTION_ABORT = false;
 
-    private BackendInterface $backend;
+    private AdapterInterface $adapter;
     private bool $inTransaction;
 
     /**
      * Create a new database client to the provided backend.
      *
-     * @param BackendInterface $backend Database backend
+     * @param AdapterInterface $adapter Database adapter
      */
-    public function __construct(BackendInterface $backend)
+    public function __construct(AdapterInterface $adapter)
     {
-        $this->backend = $backend;
+        $this->adapter = $adapter;
         $this->inTransaction = false;
     }
 
@@ -53,7 +53,7 @@ class Database
         $sql = $query->getQuery();
         $parameters = $query->getParameters();
 
-        return $this->backend->execute($sql, $parameters);
+        return $this->adapter->execute($sql, $parameters);
     }
 
     /**
@@ -111,12 +111,12 @@ class Database
 
         try {
             if (self::TRANSACTION_ABORT === ($result = $callback($this))) {
-                $this->backend->abortTransaction();
+                $this->adapter->abortTransaction();
             } else {
-                $this->backend->commitTransaction();
+                $this->adapter->commitTransaction();
             }
         } catch (Exception $e) {
-            $this->backend->abortTransaction();
+            $this->adapter->abortTransaction();
 
             throw TransactionException::createFromException($e);
         } finally {
@@ -130,19 +130,19 @@ class Database
      * Determine if the current adapter supports transactions
      *
      * @psalm-mutation-free
-     * @psalm-assert-if-true TransactionInterface $this->backend
+     * @psalm-assert-if-true TransactionInterface $this->adapter
      *
      * @return bool Adapter supports transactions
      */
     public function hasTransactionSupport(): bool
     {
-        return ($this->backend instanceof TransactionInterface);
+        return ($this->adapter instanceof TransactionInterface);
     }
 
     /**
      * Start a new database transaction.
      *
-     * @psalm-assert TransactionInterface $this->backend
+     * @psalm-assert TransactionInterface $this->adapter
      *
      * @throws AdapterException
      *      If the current adapter does not support transactions
@@ -152,14 +152,14 @@ class Database
     private function startTransaction(): void
     {
         if (!$this->hasTransactionSupport()) {
-            throw AdapterException::createForTransaction($this->backend);
+            throw AdapterException::createForTransaction($this->adapter);
         }
 
         if (true === $this->inTransaction) {
             throw TransactionException::createInProgress();
         }
 
-        $this->backend->startTransaction();
+        $this->adapter->startTransaction();
         $this->inTransaction = true;
     }
 

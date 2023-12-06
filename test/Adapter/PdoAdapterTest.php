@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Swiftly\Database\Test\Backend;
+namespace Swiftly\Database\Test\Adapter;
 
 use PDO;
 use PDOStatement;
 use PDOException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use Swiftly\Database\Backend\PdoAdapter;
+use Swiftly\Database\Adapter\PdoAdapter;
 use Swiftly\Database\AbstractParameter;
 use Swiftly\Database\Parameter\SetParameter;
 use Swiftly\Database\Parameter\BooleanParameter;
@@ -16,7 +16,7 @@ use Swiftly\Database\Collection;
 use Swiftly\Database\Exception\QueryException;
 
 /**
- * @covers \Swiftly\Database\Backend\PdoAdapter
+ * @covers \Swiftly\Database\Adapter\PdoAdapter
  * @uses \Swiftly\Database\Collection
  */
 class PdoAdapterTest extends TestCase

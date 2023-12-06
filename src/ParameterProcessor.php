@@ -43,7 +43,7 @@ abstract class ParameterProcessor
      */
     final public static function infer(string $name, $value): AbstractParameter
     {
-        switch(true) {
+        switch (true) {
             case is_bool($value):
                 return new BooleanParameter($name, $value);
             case is_float($value):

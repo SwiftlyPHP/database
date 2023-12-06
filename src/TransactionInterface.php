@@ -5,7 +5,7 @@ namespace Swiftly\Database;
 use Swiftly\Database\Exception\TransactionException;
 
 /**
- * Interface implemented by database backends that support transactions.
+ * Interface implemented by database adapters that support transactions.
  *
  * @package Adapter
  */

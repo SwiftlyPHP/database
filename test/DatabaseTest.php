@@ -6,7 +6,7 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Swiftly\Database\Database;
-use Swiftly\Database\BackendInterface;
+use Swiftly\Database\AdapterInterface;
 use Swiftly\Database\TransactionInterface;
 use Swiftly\Database\AbstractParameter;
 use Swiftly\Database\Query;
@@ -20,8 +20,8 @@ use Swiftly\Database\Exception\AdapterException;
  */
 class DatabaseTest extends TestCase
 {
-    /** @var MockObject&BackendInterface $backend */
-    private MockObject $backend;
+    /** @var MockObject&AdapterInterface $adapter */
+    private MockObject $adapter;
     private Database $database;
 
     const EXAMPLE_SELECT = 'SELECT * FROM test';
@@ -30,7 +30,7 @@ class DatabaseTest extends TestCase
     public function setUp(): void
     {
         $this->database = new Database(
-            $this->backend = self::createMock(BackendInterface::class)
+            $this->adapter = self::createMock(AdapterInterface::class)
         );
     }
 
@@ -43,7 +43,7 @@ class DatabaseTest extends TestCase
     public function setUpIntersection(): void
     {
         $this->database = new Database(
-            $this->backend = self::createMock(BackendTransactionInterface::class)
+            $this->adapter = self::createMock(BackendTransactionInterface::class)
         );
     }
 
@@ -71,7 +71,7 @@ class DatabaseTest extends TestCase
             ->method('getParameters')
             ->willReturn([]);
 
-        $this->backend->expects(self::once())
+        $this->adapter->expects(self::once())
             ->method('execute')
             ->with(self::EXAMPLE_SELECT, []);
 
@@ -92,7 +92,7 @@ class DatabaseTest extends TestCase
             ->method('getParameters')
             ->willReturn(['name' => $parameter]);
 
-        $this->backend->expects(self::once())
+        $this->adapter->expects(self::once())
             ->method('execute')
             ->with(self::EXAMPLE_SELECT_WHERE, ['name' => $parameter]);
 
@@ -111,7 +111,7 @@ class DatabaseTest extends TestCase
 
         $collection = self::createMock(Collection::class);
 
-        $this->backend->expects(self::once())
+        $this->adapter->expects(self::once())
             ->method('execute')
             ->with(self::EXAMPLE_SELECT, [])
             ->willReturn($collection);
@@ -125,9 +125,9 @@ class DatabaseTest extends TestCase
     {
         $this->setUpIntersection();
 
-        $this->backend->expects(self::once())
+        $this->adapter->expects(self::once())
             ->method('startTransaction');
-        $this->backend->expects(self::once())
+        $this->adapter->expects(self::once())
             ->method('execute')
             ->with(SELF::EXAMPLE_SELECT);
 
@@ -144,7 +144,7 @@ class DatabaseTest extends TestCase
 
         $collection = self::createMock(Collection::class);
 
-        $this->backend->expects(self::once())
+        $this->adapter->expects(self::once())
             ->method('execute')
             ->with(self::EXAMPLE_SELECT)
             ->willReturn($collection);
@@ -160,9 +160,9 @@ class DatabaseTest extends TestCase
     {
         $this->setUpIntersection();
 
-        $this->backend->expects(self::once())
+        $this->adapter->expects(self::once())
             ->method('commitTransaction');
-        $this->backend->expects(self::never())
+        $this->adapter->expects(self::never())
             ->method('abortTransaction');
 
         $this->database->withTransaction(function (Database $database) {
@@ -174,9 +174,9 @@ class DatabaseTest extends TestCase
     {
         $this->setUpIntersection();
 
-        $this->backend->expects(self::once())
+        $this->adapter->expects(self::once())
             ->method('abortTransaction');
-        $this->backend->expects(self::never())
+        $this->adapter->expects(self::never())
             ->method('commitTransaction');
 
         $this->database->withTransaction(function (Database $database) {
@@ -189,9 +189,9 @@ class DatabaseTest extends TestCase
     {
         $this->setUpIntersection();
 
-        $this->backend->expects(self::once())
+        $this->adapter->expects(self::once())
             ->method('abortTransaction');
-        $this->backend->expects(self::never())
+        $this->adapter->expects(self::never())
             ->method('commitTransaction');
 
         self::expectException(TransactionException::class);
@@ -207,9 +207,9 @@ class DatabaseTest extends TestCase
     {
         $this->setUpIntersection();
 
-        $this->backend->expects(self::once())
+        $this->adapter->expects(self::once())
             ->method('startTransaction');
-        $this->backend->expects(self::once())
+        $this->adapter->expects(self::once())
             ->method('abortTransaction');
 
         self::expectException(TransactionException::class);
@@ -229,13 +229,13 @@ class DatabaseTest extends TestCase
 }
 
 /**
- * Allows the mocking of intersection BackendInterface & TransactionInterface
+ * Allows the mocking of intersection AdapterInterface & TransactionInterface
  *
  * When we reach PHPUnit 10 we can use `createMockForIntersectionOfInterfaces()`
  *
  * @internal
  */
 interface BackendTransactionInterface extends
-    BackendInterface,
+    AdapterInterface,
     TransactionInterface
 {}

@@ -4,7 +4,7 @@ namespace Swiftly\Database\Builder;
 
 use Swiftly\Database\BuilderInterface;
 use PDO;
-use Swiftly\Database\Backend\PdoAdapter;
+use Swiftly\Database\Adapter\PdoAdapter;
 
 use function sprintf;
 use function implode;
@@ -12,7 +12,7 @@ use function implode;
 /**
  * Utility for configuring and initialising PDO adapters.
  *
- * @see \Swiftly\Database\Backend\PdoAdapter
+ * @see \Swiftly\Database\Adapter\PdoAdapter
  *
  * @psalm-type StatementClass = list{class-string,mixed[]}
  * @psalm-type AttrFlag = PDO::CASE_*|PDO::ERRMODE_*|PDO::NULL_*|PDO::FETCH_*

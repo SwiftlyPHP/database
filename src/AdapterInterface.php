@@ -12,7 +12,7 @@ use Swiftly\Database\AbstractParameter;
  *
  * @package Adapter
  */
-interface BackendInterface
+interface AdapterInterface
 {
     /**
      * Execute the given SQL statement and return the result.

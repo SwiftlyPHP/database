@@ -2,7 +2,7 @@
 
 namespace Swiftly\Database;
 
-use Swiftly\Database\BackendInterface;
+use Swiftly\Database\AdapterInterface;
 
 /**
  * Builders are utility classes used to help configure and create adapters.
@@ -14,7 +14,7 @@ interface BuilderInterface
     /**
      * Create a new database adapter instance.
      *
-     * @return BackendInterface Configured adapter object
+     * @return AdapterInterface Configured adapter object
      */
-    public function create(): BackendInterface;
+    public function create(): AdapterInterface;
 }

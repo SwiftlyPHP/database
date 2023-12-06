@@ -7,12 +7,12 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PDO;
 use Swiftly\Database\Builder\PdoAdapterBuilder;
 use Swiftly\Database\Test\PdoExpectationTrait;
-use Swiftly\Database\Backend\PdoAdapter;
+use Swiftly\Database\Adapter\PdoAdapter;
 use PDOException;
 
 /**
  * @covers \Swiftly\Database\Builder\PdoAdapterBuilder
- * @uses \Swiftly\Database\Backend\PdoAdapter
+ * @uses \Swiftly\Database\Adapter\PdoAdapter
  */
 class PdoAdapterBuilderTest extends TestCase
 {

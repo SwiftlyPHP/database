@@ -4,7 +4,7 @@ namespace Swiftly\Database\Exception;
 
 use LogicException;
 use Swiftly\Database\ExceptionInterface;
-use Swiftly\Database\BackendInterface;
+use Swiftly\Database\AdapterInterface;
 
 use function sprintf;
 use function get_class;
@@ -27,14 +27,14 @@ class AdapterException extends LogicException implements ExceptionInterface
      * If you encounter this exception but need to use transactions you will
      * have to swap to using a different database adapter.
      *
-     * @param BackendInterface $backend The adapter currently in use
+     * @param AdapterInterface $adapter The adapter currently in use
      * @return self                     Adapter exception
      */
-    public static function createForTransaction(BackendInterface $backend): self
+    public static function createForTransaction(AdapterInterface $adapter): self
     {
         return new self(sprintf(
             "Operation failed as adapter '%s' does not support transactions",
-            get_class($backend)
+            get_class($adapter)
         ));
     }
 

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Swiftly\Database\Backend;
+namespace Swiftly\Database\Adapter;
 
-use Swiftly\Database\BackendInterface;
+use Swiftly\Database\AdapterInterface;
 use PDO;
 use Swiftly\Database\Collection;
 use PDOStatement;
@@ -32,7 +32,7 @@ use function implode;
  *
  * @package Adapter
  */
-class PdoAdapter implements BackendInterface
+class PdoAdapter implements AdapterInterface
 {
     private PDO $pdo;
 
