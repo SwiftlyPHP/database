@@ -9,11 +9,11 @@ Creates a new [PdoAdapter](../../backend/PdoAdapter) instance using the
 configuration of the current builder.
 
 Can be called as few or many times as required, each time returning a new/fresh
-adapter (unique reference). Configuration can be changed between each call,
+adapter instance. Configuration can be changed between each call,
 allowing adapters with similar - but not identical - configuration to be quickly
 created in sequence.
 
-See [usage](#usage) examples.
+See [usage](#usage) for examples.
 
 ## Method Signature
 

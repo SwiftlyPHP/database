@@ -38,7 +38,7 @@ class PdoAdapterBuilder implements BuilderInterface
 * [`PdoAdapterBuilder::Mysql`](./Mysql.md) - Creates a builder for MySQL-PDO adapters
 * [`PdoAdapterBuilder::Postgres`](./Postgres.md) - Creates a builder for PostgreSQL-PDO adapters
 * [`PdoAdapterBuilder::setFactory`](./setFactory.md) - Change the factory used to create PDO instances
-* [`PdoAdapterBuilder::__construct`](./__construct.md) - Creates a new builder for a given database type
+* [`PdoAdapterBuilder::__construct`](./construct.md) - Creates a new builder for a given database type
 * [`PdoAdapterBuilder::setHostname`](./setHostname.md) - Sets the hostname of the database
 * [`PdoAdapterBuilder::setSocket`](./setSocket.md) - Sets the UNIX socket used to connect the database
 * [`PdoAdapterBuilder::setPort`](./setPort.md) - Sets the port used to connect to the database
