@@ -25,7 +25,7 @@ interface AdapterInterface
      * @return Collection|null                            Query results
      *
      * @throws AdapterException
-     *      If the database does not support/understand the command
+     *      If the database does not support the requested operation
      * @throws QueryException
      *      If there is a problem during execution of the SQL query
      */

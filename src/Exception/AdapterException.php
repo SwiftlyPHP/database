@@ -13,7 +13,7 @@ use function get_class;
  * Exception used to indicate a problem with a database adapter.
  *
  * If this exception is encountered it usually indicates you are attempting to
- * perform an operation that is not supported by this adapter.
+ * perform an operation that is not supported by your chosen database adapter.
  *
  * @package Exception
  *
@@ -88,7 +88,7 @@ class AdapterException extends LogicException implements ExceptionInterface
     public static function createForOrphanedQuery(): self
     {
         return new self(
-            'Failed to execute query as it has not been attached to a database'
+            'Failed to execute query as no database has been assigned'
         );
     }
 }
