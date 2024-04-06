@@ -43,7 +43,7 @@ trait PdoExpectationTrait
      */
     public function expectUsername(string $username): void
     {
-        $this->expectUsername = new IsEqual($username);
+        $this->expectedUsername = new IsEqual($username);
     }
 
     /**
@@ -53,7 +53,7 @@ trait PdoExpectationTrait
      */
     public function expectUsernameMatches(string $pattern): void
     {
-        $this->expectUsername = new RegularExpression($pattern);
+        $this->expectedUsername = new RegularExpression($pattern);
     }
 
     /**
