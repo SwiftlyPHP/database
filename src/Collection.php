@@ -14,7 +14,7 @@ use function reset;
  *
  * @package Query
  *
- * @psalm-immutable
+ * @psalm-external-mutation-free
  *
  * @template TKey of array-key
  * @template TVal
@@ -64,7 +64,7 @@ class Collection implements IteratorAggregate, Countable
     /**
      * Returns the first item of the collection.
      *
-     * Interally uses PHP's array {@see reset} function so this SHOULD NOT be
+     * Interally uses PHP's array {@see reset} function so this shouldn't be
      * called from within a loop.
      *
      * @return TVal Collection item
