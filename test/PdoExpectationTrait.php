@@ -73,7 +73,7 @@ trait PdoExpectationTrait
      */
     public function expectPasswordMatches(string $pattern): void
     {
-        $this->expectPassword = new RegularExpression($pattern);
+        $this->expectedPassword = new RegularExpression($pattern);
     }
 
     /**
