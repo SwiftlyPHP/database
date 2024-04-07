@@ -9,6 +9,9 @@ use function implode;
 /**
  * Utility for creating database DSN strings.
  *
+ * @psalm-type DsnValues = array<non-empty-string,string|int|null>
+ * @psalm-type DsnBuilder = callable(DsnValues):non-empty-string
+ *
  * @package Builder
  */
 abstract class Dsn
@@ -16,6 +19,24 @@ abstract class Dsn
     public const TYPE_MYSQL = 'mysql';
     public const TYPE_MARIADB = self::TYPE_MYSQL;
     public const TYPE_POSTGRES = 'pgsql';
+
+    /** @var array<non-empty-string,DsnBuilder> */
+    private static $registered = [];
+
+    /**
+     * Register a callback used to build DSNs for `$type` databases.
+     *
+     * @psalm-param DsnBuilder $builder
+     *
+     * @param non-empty-string $type Database type
+     * @param callable $builder      DSN builder function
+     */
+    final public static function registerScheme(
+        string $type,
+        callable $builder
+    ): void {
+        self::$registered[$type] = $builder;
+    }
 
     /**
      * Create a DSN string to connect to a `$type` database.
@@ -39,6 +60,9 @@ abstract class Dsn
             case self::TYPE_POSTGRES:
                 return self::createPostgres($values);
             default:
+                if (isset(self::$registered[$type])) {
+                    return self::$registered[$type]($values);
+                }
                 throw DsnException::createUnsupported($type);
         }
     }
