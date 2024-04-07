@@ -2,12 +2,11 @@
 
 namespace Swiftly\Database\Builder;
 
-use Swiftly\Database\BuilderInterface;
 use PDO;
 use Swiftly\Database\Adapter\PdoAdapter;
-
-use function sprintf;
-use function implode;
+use Swiftly\Database\BuilderInterface;
+use Swiftly\Database\Dsn;
+use Swiftly\Database\Exception\DsnException;
 
 /**
  * Utility for configuring and initialising PDO adapters.
@@ -22,6 +21,7 @@ use function implode;
  */
 class PdoAdapterBuilder implements BuilderInterface
 {
+    /** @var non-empty-string $type */
     private string $type;
     private ?string $hostname = null;
     private ?string $socket = null;
@@ -250,6 +250,9 @@ class PdoAdapterBuilder implements BuilderInterface
      * Creates a new PDO adapter using the configuration values specified.
      *
      * @return PdoAdapter PDO adapter object
+     *
+     * @throws DsnException
+     *      If a DSN cannot be created for the database type
      */
     public function create(): PdoAdapter
     {
@@ -271,39 +274,19 @@ class PdoAdapterBuilder implements BuilderInterface
      * Create a DSN string using the provided configuration.
      *
      * @return string DSN string
+     *
+     * @throws DsnException
      */
     private function createDsn(): string
     {
-        $dsn = [];
-
-        if (null !== $this->hostname) {
-            $dsn[] = sprintf('%s:host=%s', $this->type, $this->hostname);
-        } elseif (null !== $this->socket) {
-            $dsn[] = sprintf('%s:unix_socket=%s', $this->type, $this->socket);
-        } else {
-
-        }
-
-        if (null !== $this->username) {
-            $dsn[] = sprintf('user=%s', $this->username);
-        }
-
-        if (null !== $this->password) {
-            $dsn[] = sprintf('password=%s', $this->password);
-        }
-
-        if (null !== $this->port) {
-            $dsn[] = sprintf('port=%d', $this->port);
-        }
-
-        if (null !== $this->database) {
-            $dsn[] = sprintf('dbname=%s', $this->database);
-        }
-
-        if (null !== $this->charset) {
-            $dsn[] = sprintf('charset=%s', $this->charset);
-        }
-
-        return implode(';', $dsn);
+        return Dsn::create($this->type, [
+            'host' => $this->hostname,
+            'port' => $this->port,
+            'socket' => $this->socket,
+            'username' => $this->username,
+            'password' => $this->password,
+            'database' => $this->database,
+            'charset' => $this->charset
+        ]);
     }
 }
