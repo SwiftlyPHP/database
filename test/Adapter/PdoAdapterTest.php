@@ -41,6 +41,9 @@ class PdoAdapterTest extends TestCase
         $statement->expects(self::once())
             ->method('execute')
             ->willReturn(true);
+        $statement->expects(self::once())
+            ->method('fetchAll')
+            ->willReturn([]);
 
         $this->pdo->expects(self::once())
             ->method('prepare')
@@ -62,6 +65,9 @@ class PdoAdapterTest extends TestCase
         $statement->expects(self::once())
             ->method('execute')
             ->willReturn(true);
+        $statement->expects(self::once())
+            ->method('fetchAll')
+            ->willReturn([]);
 
         $this->pdo->expects(self::once())
             ->method('prepare')
@@ -79,6 +85,12 @@ class PdoAdapterTest extends TestCase
         $parameter->value = [1, 2, 3];
 
         $statement = self::createMock(PDOStatement::class);
+        $statement->expects(self::once())
+            ->method('execute')
+            ->willReturn(true);
+        $statement->expects(self::once())
+            ->method('fetchAll')
+            ->willReturn([]);
 
         $this->pdo->expects(self::once())
             ->method('prepare')
@@ -97,6 +109,12 @@ class PdoAdapterTest extends TestCase
         $parameter->value = ['John', 'Jack', 'Jill'];
 
         $statement = self::createMock(PDOStatement::class);
+        $statement->expects(self::once())
+            ->method('execute')
+            ->willReturn(true);
+        $statement->expects(self::once())
+            ->method('fetchAll')
+            ->willReturn([]);
 
         $this->pdo->expects(self::exactly(3))
             ->method('quote')
@@ -125,6 +143,12 @@ class PdoAdapterTest extends TestCase
         $statement->expects(self::once())
             ->method('bindValue')
             ->with('status', true, PDO::PARAM_BOOL);
+        $statement->expects(self::once())
+            ->method('execute')
+            ->willReturn(true);
+        $statement->expects(self::once())
+            ->method('fetchAll')
+            ->willReturn([]);
 
         $this->pdo->expects(self::once())
             ->method('prepare')
@@ -146,6 +170,12 @@ class PdoAdapterTest extends TestCase
         $statement->expects(self::once())
             ->method('bindValue')
             ->with('id', 42, PDO::PARAM_INT);
+        $statement->expects(self::once())
+            ->method('execute')
+            ->willReturn(true);
+        $statement->expects(self::once())
+            ->method('fetchAll')
+            ->willReturn([]);
 
         $this->pdo->expects(self::once())
             ->method('prepare')
@@ -193,6 +223,9 @@ class PdoAdapterTest extends TestCase
         $statement->expects(self::once())
             ->method('execute')
             ->willReturn(true);
+        $statement->expects(self::once())
+            ->method('fetchAll')
+            ->willReturn([]);
         $statement->expects(self::once())
             ->method('closeCursor');
 
