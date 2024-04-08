@@ -10,7 +10,7 @@ use function implode;
  * Utility for creating database DSN strings.
  *
  * @psalm-type DsnValues = array<non-empty-string,string|int|null>
- * @psalm-type DsnBuilder = callable(DsnValues):non-empty-string
+ * @psalm-type DsnBuilder = pure-callable(DsnValues):non-empty-string
  *
  * @package Builder
  */
@@ -25,6 +25,8 @@ abstract class Dsn
 
     /**
      * Register a callback used to build DSNs for `$type` databases.
+     *
+     * @psalm-external-mutation-free
      *
      * @psalm-param DsnBuilder $builder
      *
@@ -43,7 +45,7 @@ abstract class Dsn
      *
      * @upgrade:php-8.1 Swap to match statement
      *
-     * @psalm-pure
+     * @psalm-external-mutation-free
      *
      * @param non-empty-string $type                          Database type
      * @param array<non-empty-string,string|int|null> $values Connection values
