@@ -136,12 +136,14 @@ class PdoAdapter implements AdapterInterface
      * @param non-empty-string $sql                       SQL query to prepare
      * @param array<string,AbstractParameter> $parameters Query parameters
      */
-    private function prepare(string $sql, array $parameters): PDOStatement
+    private function prepare(string $sql, array &$parameters): PDOStatement
     {
         $parameters_to_replace = self::filterSets($parameters);
 
         foreach ($parameters_to_replace as $name => $replace) {
             $sql = $this->replaceParameter($sql, $name, $replace->value);
+
+            unset($parameters[$name]);
         }
 
         return $this->pdo->prepare($sql);
