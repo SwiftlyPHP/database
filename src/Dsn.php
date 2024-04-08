@@ -114,15 +114,18 @@ abstract class Dsn
     {
         $parts = [];
 
-        if (isset($values['host'])) {
-            $parts[] = 'host=' . $values['host'];
-        } elseif (isset($values['socket'])) {
+        if (isset($values['socket'])) {
             $parts[] = 'host=' . $values['socket'];
+        } else {
+            if (isset($values['host'])) {
+                $parts[] = 'host=' . $values['host'];
+            }
+
+            if (isset($values['port'])) {
+                $parts[] = 'port=' . $values['port'];
+            }
         }
 
-        if (isset($values['port'])) {
-            $parts[] = 'port=' . $values['port'];
-        }
 
         if (isset($values['username'])) {
             $parts[] = 'user=' . $values['username'];
