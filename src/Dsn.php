@@ -128,7 +128,6 @@ abstract class Dsn
             }
         }
 
-
         if (isset($values['username'])) {
             $parts[] = 'user=' . $values['username'];
         }
