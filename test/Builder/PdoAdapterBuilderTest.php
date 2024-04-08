@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use PDO;
 use Swiftly\Database\Builder\PdoAdapterBuilder;
+use Swiftly\Database\Dsn;
 use Swiftly\Database\Test\PdoExpectationTrait;
 use Swiftly\Database\Adapter\PdoAdapter;
 use PDOException;
@@ -13,6 +14,7 @@ use PDOException;
 /**
  * @covers \Swiftly\Database\Builder\PdoAdapterBuilder
  * @uses \Swiftly\Database\Adapter\PdoAdapter
+ * @uses \Swiftly\Database\Dsn
  */
 class PdoAdapterBuilderTest extends TestCase
 {
@@ -27,21 +29,18 @@ class PdoAdapterBuilderTest extends TestCase
         $this->builder = new PdoAdapterBuilder('test');
         $this->pdo = self::createMock(PDO::class);
 
-        PdoAdapterBuilder::setFactory([$this, 'validateExceptations']);
+        PdoAdapterBuilder::setFactory([$this, 'validatePdo']);
+        Dsn::registerScheme('test', [$this, 'validateDsn']);
     }
 
-    public function validateExceptations(string $dsn, ?string $username, ?string $password, array $options): PDO
-    {
+    public function validatePdo(
+        string $dsn,
+        ?string $username,
+        ?string $password,
+        array $options
+    ): PDO {
         if (null !== $this->expectedDsn) {
             self::assertThat($dsn, $this->expectedDsn);
-        }
-
-        if (null !== $this->expectedUsername) {
-            self::assertThat($username, $this->expectedUsername);
-        }
-
-        if (null !== $this->expectedPassword) {
-            self::assertThat($password, $this->expectedPassword);
         }
 
         if (null !== $this->expectedOptions) {
@@ -51,9 +50,40 @@ class PdoAdapterBuilderTest extends TestCase
         return $this->pdo;
     }
 
+    public function validateDsn(array $options): string
+    {
+        if (null !== $this->expectedHost) {
+            self::assertArrayHasKey('host', $options);
+            self::assertThat($options['host'], $this->expectedHost);
+        }
+
+        if (null !== $this->expectedSocket) {
+            self::assertArrayHasKey('socket', $options);
+            self::assertThat($options['socket'], $this->expectedSocket);
+        }
+
+        if (null !== $this->expectedPort) {
+            self::assertArrayHasKey('port', $options);
+            self::assertThat($options['port'], $this->expectedPort);
+        }
+
+        if (null !== $this->expectedUsername) {
+            self::assertArrayHasKey('username', $options);
+            self::assertThat($options['username'], $this->expectedUsername);
+        }
+
+        if (null !== $this->expectedPassword) {
+            self::assertArrayHasKey('username', $options);
+            self::assertThat($options['password'], $this->expectedPassword);
+        }
+
+        return 'test-dsn';
+    }
+
     public function testCanConfigureHostnameAndPort(): void
     {
-        self::expectDsn('test:host=127.0.0.1;port=4242');
+        self::expectHost('127.0.0.1');
+        self::expectPort(4242);
 
         $this->builder
             ->setHostname('127.0.0.1')
@@ -63,7 +93,7 @@ class PdoAdapterBuilderTest extends TestCase
 
     public function testCanConfigureUnixSocket(): void
     {
-        self::expectDsn('test:unix_socket=/var/run/database.sock');
+        self::expectSocket('/var/run/database.sock');
 
         $this->builder
             ->setSocket('/var/run/database.sock')
@@ -72,7 +102,7 @@ class PdoAdapterBuilderTest extends TestCase
 
     public function testCanConfigureUsernameAndPassword(): void
     {
-        self::expectDsn('test:host=localhost;user=root;password=123');
+        self::expectHost('localhost');
         self::expectUsername('root');
         self::expectPassword('123');
 
@@ -85,7 +115,8 @@ class PdoAdapterBuilderTest extends TestCase
 
     public function testCanConfigureDatabase(): void
     {
-        self::expectDsn('test:host=localhost;dbname=sales');
+        self::expectHost('localhost');
+        self::expectDatabase('sales');
 
         $this->builder
             ->setHostname('localhost')
@@ -95,7 +126,8 @@ class PdoAdapterBuilderTest extends TestCase
 
     public function testCanConfigureCharset(): void
     {
-        self::expectDsn('test:host=localhost;charset=utf8');
+        self::expectHost('localhost');
+        self::expectCharset('utf8');
 
         $this->builder
             ->setHostname('localhost')
@@ -128,9 +160,11 @@ class PdoAdapterBuilderTest extends TestCase
 
     public function testCanCreateAdapterFromConfiguration(): void
     {
-        self::expectDsnMatches('/^test:host=localhost;user=root;password=123/');
+        self::expectHost('localhost');
         self::expectUsername('root');
         self::expectPassword('123');
+        self::expectDatabase('sales');
+        self::expectCharset('utf8');
         self::expectOptions(['verbose' => false]);
 
         $adapter = $this->builder
@@ -164,7 +198,6 @@ class PdoAdapterBuilderTest extends TestCase
     {
         PdoAdapterBuilder::setFactory(
             function ($dsn, $username, $password, $options) {
-                self::assertSame('test:host=localhost;user=root;password=123', $dsn);
                 self::assertSame('root', $username);
                 self::assertSame('123', $password);
                 self::assertSame(['verbose' => true], $options);
@@ -209,7 +242,7 @@ class PdoAdapterBuilderTest extends TestCase
 
     public function testCanCreateAdapterForMysql(): void
     {
-        self::expectDsnMatches('/^mysql:host=/');
+        self::expectDsn('mysql:host=localhost');
 
         PdoAdapterBuilder::Mysql()
             ->setHostname('localhost')
@@ -218,7 +251,7 @@ class PdoAdapterBuilderTest extends TestCase
 
     public function testCanCreateAdapterForPostgres(): void
     {
-        self::expectDsnMatches('/^pgsql:host=/');
+        self::expectDsn('pgsql:host=localhost');
 
         PdoAdapterBuilder::Postgres()
             ->setHostname('localhost')

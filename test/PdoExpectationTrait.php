@@ -12,8 +12,13 @@ use PHPUnit\Framework\Constraint\RegularExpression;
 trait PdoExpectationTrait
 {
     protected ?Constraint $expectedDsn = null;
+    protected ?Constraint $expectedHost = null;
+    protected ?Constraint $expectedPort = null;
+    protected ?Constraint $expectedSocket = null;
     protected ?Constraint $expectedUsername = null;
     protected ?Constraint $expectedPassword = null;
+    protected ?Constraint $expectedDatabase = null;
+    protected ?Constraint $expectedCharset = null;
     protected ?Constraint $expectedOptions = null;
 
     /**
@@ -27,13 +32,33 @@ trait PdoExpectationTrait
     }
 
     /**
-     * Assert that the DSN matches the given regular expression
+     * Assert that the hostname matches the given string
      *
-     * @param string $pattern Regular expression
+     * @param string $host Expected hostname
      */
-    public function expectDsnMatches(string $pattern): void
+    public function expectHost(string $host): void
     {
-        $this->expectedDsn = new RegularExpression($pattern);
+        $this->expectedHost = new IsEqual($host);
+    }
+
+    /**
+     * Assert that the server port matches the given value
+     *
+     * @param int $port Port number
+     */
+    public function expectPort(int $port): void
+    {
+        $this->expectedPort = new IsEqual($port);
+    }
+
+    /**
+     * Assert that the unix socket matches the given value
+     *
+     * @param int $socket Socket name
+     */
+    public function expectSocket(string $socket): void
+    {
+        $this->expectedSocket = new IsEqual($socket);
     }
 
     /**
@@ -47,16 +72,6 @@ trait PdoExpectationTrait
     }
 
     /**
-     * Assert that the database username matches the given regular expression
-     *
-     * @param string $pattern Regular expression
-     */
-    public function expectUsernameMatches(string $pattern): void
-    {
-        $this->expectedUsername = new RegularExpression($pattern);
-    }
-
-    /**
      * Assert that the database password matches the given string
      *
      * @param string $password Expected password
@@ -67,13 +82,23 @@ trait PdoExpectationTrait
     }
 
     /**
-     * Assert that the database password matches the given regular expression
+     * Assert that the database matches the given string
      *
-     * @param string $pattern Regular expression
+     * @param string $database Database name
      */
-    public function expectPasswordMatches(string $pattern): void
+    public function expectDatabase(string $database): void
     {
-        $this->expectedPassword = new RegularExpression($pattern);
+        $this->expectedDatabase = new IsEqual($database);
+    }
+
+    /**
+     * Assert that the charset matches the given string
+     *
+     * @param string $charset Charset name
+     */
+    public function expectCharset(string $charset): void
+    {
+        $this->expectedCharset = new IsEqual($charset);
     }
 
     /**

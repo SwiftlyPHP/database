@@ -24,7 +24,7 @@ class DsnException extends Exception implements ExceptionInterface
     public static function createUnsupported(string $type): self
     {
         return new self(sprintf(
-            "Failed to create a '%s' DSN as they are not supported!",
+            "Failed to create a DSN for unknown database type '%s'!",
             $type
         ));
     }
