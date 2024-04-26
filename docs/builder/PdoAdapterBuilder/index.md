@@ -107,4 +107,4 @@ $database->query(...);
 
 ## See Also
 
-* [PdoAdapter] - More information on the PDO adapter
+* [`PdoAdapter`] - More information on the PDO adapter

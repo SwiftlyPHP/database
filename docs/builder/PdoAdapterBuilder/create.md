@@ -76,7 +76,7 @@ values.
 
 ## See Also
 
-* [PdoAdapter](../../backend/PdoAdapter) - To learn how to use the created adapter
-* [PdoAdapterBuilder](./index.md) - To see all supported configuration values
-* [PdoAdapterBuilder::Mysql](./Mysql.md) - To create builders for MySQL databases
-* [PdoAdapterBuilder::Postgres](./Postgres.md) - To create builders for PostgreSQL databases
+* [`PdoAdapter`](../../backend/PdoAdapter) - To learn how to use the created adapter
+* [`PdoAdapterBuilder`](./index.md) - To see all supported configuration values
+* [`PdoAdapterBuilder::Mysql`](./Mysql.md) - To create builders for MySQL databases
+* [`PdoAdapterBuilder::Postgres`](./Postgres.md) - To create builders for PostgreSQL databases

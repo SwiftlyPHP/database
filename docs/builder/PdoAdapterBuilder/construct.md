@@ -39,5 +39,5 @@ $database->query(...);
 
 ## See Also
 
-* [PdoAdapterBuilder::Postgres](./Postgres.md) - To create builders for PostgreSQL databases
-* [PdoAdapterBuilder::Mysql](./Mysql.md) - To create builders for MySQL databases
+* [`PdoAdapterBuilder::Postgres`](./Postgres.md) - To create builders for PostgreSQL databases
+* [`PdoAdapterBuilder::Mysql`](./Mysql.md) - To create builders for MySQL databases

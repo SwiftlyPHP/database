@@ -34,6 +34,6 @@ $database->query(...);
 
 ## See Also
 
-* [PdoAdapterBuilder::Mysql](./Mysql.md) - To create builders for MySQL databases
-* [PdoAdapterBuilder::__construct](./construct.md) - To create builders for any database type
-* [PdoAdapter] - More information on the PDO adapter
+* [`PdoAdapterBuilder::Mysql`](./Mysql.md) - To create builders for MySQL databases
+* [`PdoAdapterBuilder::__construct`](./construct.md) - To create builders for any database type
+* [`PdoAdapter`] - More information on the PDO adapter
