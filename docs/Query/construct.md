@@ -5,7 +5,7 @@ tags: [constructor, query, sql]
 ---
 # Query::\_\_construct
 
-Create a new [`Query`] object with the given SQL.
+Create a new [`Query`](.) object with the given SQL.
 
 ## Method Signature
 

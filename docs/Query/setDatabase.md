@@ -1,7 +1,7 @@
 ---
 since: 1.0
 type: method
-tags: [query]
+tags: [query, database]
 ---
 # Query::setDatabase
 
@@ -37,5 +37,5 @@ $customers = $query->execute();
 ## See Also
 
 * [`Database::query`] - To create a query associated with an existing database
-* [`Database::execute`] - To query a database directly
+* [`Database::execute`] - To execute a query directly
 * [`Query::getDatabase`] - To get the database which will run the query

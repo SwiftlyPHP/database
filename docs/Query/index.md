@@ -96,6 +96,57 @@ $result = $database->execute($query);
 Trying to execute a query without an associated database will result in a
 [`AdapterException`] being thrown.
 
+### Passing Query Parameters
+
+To enable queries to be dynamic they also accept parameters. Parameters are
+values that will be substituted into the query, replacing placeholders with the
+same name.
+
+```php
+use Swiftly\Database\Query;
+
+$query = new Query('SELECT id, email FROM Users WHERE username = :username');
+$query->setParameter('username', 'John');
+
+// SELECT id, email FROM Users Where username = 'John';
+$query->execute();
+```
+
+Parameters will then be expanded and escaped before the query is executed by the
+database adapter.
+
+In addition to scalar values parameters can also accept an array, allowing you
+to easily construct `WHERE...IN` or `INSERT...INTO` statements.
+
+```php
+use Swiftly\Database\Query;
+
+$query = new Query('SELECT id, email FROM Users WHERE username IN (:users)');
+$query->setParameter('users', ['John', 'Jill', 'Jack']);
+
+// SELECT id, email FROM Users WHERE username IN ('John', 'Jill', 'Jack')
+$query->execute();
+```
+
+As with scalar parameters, each value in the provided array will be properly
+expanded and escaped by the underlying adapter.
+
+### Complete Example
+
+When all the above is taken together querying a database begins to look like the
+following.
+
+```php
+use Swiftly\Database\Database;
+
+$database = new Database(...);
+
+$users = $database
+    ->query('SELECT id, email FROM Users WHERE username IN (:users)')
+    ->setParameter('users', ['John', 'Jill', 'Jack'])
+    ->execute();
+```
+
 ## See Also
 
 * [Database] - More information on the database manager
