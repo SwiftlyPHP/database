@@ -17,7 +17,7 @@ class Query implements DatabaseAwareInterface
     public function __construct(string $query);
     public function setDatabase(?Database $database): void;
     public function getDatabase(): ?Database;
-    public function setParameter(string $name, mixed $value): self;
+    public function setParameter(string $name, int|float|string|bool|array $value): self;
     public function getParameters(): array;
     public function hasParameters(): bool;
     public function getQuery(): string;
@@ -30,11 +30,11 @@ class Query implements DatabaseAwareInterface
 * [`Query::__construct`](./construct.md) - Creates a new query with the given SQL
 * [`Query::setDatabase`](./setDatabase.md) - Sets the database which will run the query
 * [`Query::getDatabase`](./getDatabase.md) - Gets the database which will run the query
-* [`Query::setParameter`](./setParameter.md) - 
-* [`Query::getParameters`](./getParameters.md) - 
-* [`Query::hasParameters`](./hasParameters.md) - 
-* [`Query::getQuery`](./getQuery.md) - 
-* [`Query::execute`](./execute.md) - 
+* [`Query::setParameter`](./setParameter.md) - Sets the value of a named parameter 
+* [`Query::getParameters`](./getParameters.md) - Gets the values of all named parameters
+* [`Query::hasParameters`](./hasParameters.md) - Check if any parameter values have been set
+* [`Query::getQuery`](./getQuery.md) - Gets the SQL of the query
+* [`Query::execute`](./execute.md) - Execute the query
 
 ## Usage
 ### Creating a Query from an Existing Database

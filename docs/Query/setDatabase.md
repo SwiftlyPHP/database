@@ -5,9 +5,9 @@ tags: [query, database]
 ---
 # Query::setDatabase
 
-Associate a query with a given database.
+Sets the database that will execute this query.
 
-Passing `null` will reset the query, unlinking it from any database.
+Passing `null` will reset the query, unlinking it from the current database.
 
 ## Method Signature
 
@@ -17,7 +17,7 @@ public function setDatabase(?Database $database): void;
 
 ## Parameters
 
-* `$database` - The database the query should run against
+* `$database` - The database that will execute the query
 
 ## Usage
 ### Setting the Database
@@ -36,6 +36,6 @@ $customers = $query->execute();
 
 ## See Also
 
-* [`Database::query`] - To create a query associated with an existing database
+* [`Database::query`] - To create a query for an existing database
 * [`Database::execute`] - To execute a query directly
 * [`Query::getDatabase`] - To get the database which will run the query

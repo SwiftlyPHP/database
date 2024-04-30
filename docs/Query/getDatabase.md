@@ -5,7 +5,7 @@ tags: [query, database]
 ---
 # Query::getDatabase
 
-Return the database against which this query will be executed.
+Returns the database against which the query will be executed.
 
 ## Method Signature
 
