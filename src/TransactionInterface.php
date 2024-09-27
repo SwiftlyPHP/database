@@ -20,7 +20,7 @@ interface TransactionInterface
     public function startTransaction(): void;
 
     /**
-     * Commit the most recent database transaction.
+     * Commit the current database transaction.
      *
      * @throws TransactionException
      *      If there is no open transaction to commit
