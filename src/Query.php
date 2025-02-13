@@ -20,14 +20,6 @@ class Query implements DatabaseAwareInterface
 {
     use DatabaseAwareTrait;
 
-    public const TYPE_SELECT = 'SELECT';
-    public const TYPE_UPDATE = 'UPDATE';
-    public const TYPE_INSERT = 'INSERT';
-    public const TYPE_DELETE = 'DELETE';
-
-    public const STATUS_OK = true;
-    public const STATUS_ERROR = false;
-
     /** @var non-empty-string $query */
     private string $query;
 

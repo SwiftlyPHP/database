@@ -18,7 +18,7 @@ interface AdapterInterface
      * Execute the given SQL statement and return the result.
      *
      * The provided parameters **HAVE NOT** been escaped by this point, it is up
-     * to implementors to handle their own sanitation and quoting.
+     * to implementors to handle their own sanitising and quoting.
      *
      * @param non-empty-string $sql                       SQL statement
      * @param array<string,AbstractParameter> $parameters Parameter values

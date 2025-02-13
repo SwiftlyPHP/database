@@ -35,16 +35,13 @@ class Database
     }
 
     /**
-     * Executes the given SQL query and returns the result.
-     *
-     * Determines if the query is valid, escapes any provided parameters and
-     * then forwards the prepared query on to the current database backend.
+     * Executes the given query and returns the result (if any).
      *
      * @param Query $query     Configured query object
      * @return Collection|null Collection containing query results
      *
      * @throws QueryException
-     *      If the current database user does not have the permissions needed
+     *      If there is a problem while executing the given query
      * @throws AdapterException
      *      If the current database does not support the requested operation
      */

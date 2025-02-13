@@ -55,7 +55,7 @@ class PdoAdapterBuilder implements BuilderInterface
      */
     public static function Mysql(): self
     {
-        return new self('mysql');
+        return new self(Dsn::TYPE_MYSQL);
     }
 
     /**
@@ -65,7 +65,7 @@ class PdoAdapterBuilder implements BuilderInterface
      */
     public static function Postgres(): self
     {
-        return new self('pgsql');
+        return new self(Dsn::TYPE_POSTGRES);
     }
 
     /**

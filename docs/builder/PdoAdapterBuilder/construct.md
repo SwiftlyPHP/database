@@ -29,8 +29,8 @@ $builder = new PdoAdapterBuilder('mysql');
 
 $adapter = $builder
     ->setHostname('127.0.0.1')
+    ->setPort(3306)
     ->setUsername('root')
-    ->setPassword(3306)
     ->create();
 
 $database = new Database($adapter);

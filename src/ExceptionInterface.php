@@ -2,6 +2,8 @@
 
 namespace Swiftly\Database;
 
+use Throwable;
+
 /**
  * Common interface implemented by all database exceptions and errors.
  *
@@ -21,6 +23,6 @@ namespace Swiftly\Database;
  *
  * @package Exception
  */
-interface ExceptionInterface
+interface ExceptionInterface extends Throwable
 {
 }
