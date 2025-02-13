@@ -13,7 +13,7 @@ jobs:
           name: "Composer Install"
           command: |
               composer install -n
-              composer require --dev php-coveralls/php-coveralls
+              composer require --dev php-coveralls/php-coveralls:^2.7
       - run:
           name: "Code Style"
           command: |
